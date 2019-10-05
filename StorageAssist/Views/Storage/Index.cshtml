@@ -1,0 +1,36 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="bg-light">
+    <p class="display-4">Manage storages</p>
+</div>
+<div class="bg-light">
+    <p>
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#AddStorageForm" aria-expanded="false" aria-controls="collapseExample">
+            Add storage
+        </button>
+    </p>
+
+    <div class="collapse" id="AddStorageForm">
+        <div class="row">
+            <div class="col-12">
+                <form asp-action="AddStorage">
+                    <p>Storage name:</p>
+                    <input type="text" maxlength="50" name="StorageName" />
+                    <p>Storage type:</p>
+                    <input type="radio" name="StorageType" value="Fridge" />Fridge
+                    <input type="radio" name="StorageType" value="Freezer" />Freezer
+                    <input type="radio" name="StorageType" value="Other" />Other
+                    <p>Shared resource id:</p>
+                    <input type="text" maxlength="50" name="CommonResourceId" />
+                    <div>
+                        <button class="btn btn-info" type="submit">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
