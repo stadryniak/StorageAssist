@@ -1,8 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿
 
 <div class="bg-light">
     <p class="display-4">Manage storages</p>
@@ -19,7 +15,7 @@
             <div class="col-7">
                 <div class="ml-5">
                     <h5>Add new storage</h5>
-                    <form class="form-group" asp-action="AddStorage">
+                    <form class="form-group" asp-validation-summary="ModelOnly" asp-action="AddNewStorage">
                         <label class="font-weight-bold">Storage name:</label>
                         <input class="form-control" type="text" maxlength="50" name="storageName" />
                         <div class="form-group">
@@ -40,7 +36,7 @@
                             </div>
                         </div>
                         <div class="pt-2">
-                            <button class="btn btn-info" type="submit">Add</button>
+                            <button class="btn btn-info" type="submit">Add new</button>
                         </div>
                     </form>
                 </div>
@@ -48,9 +44,12 @@
             <div class="col-5">
                 <div class="mr-5">
                     <h5>Add existing storage</h5>
-                    <form class="form-group" asp-action="AddStorage">
+                    <form class="form-group" asp-action="AddExistingStorage">
                         <label class="font-weight-bold">StorageID</label>
                         <input class="form-control" type="text" maxlength="50" name="commonResourceId" />
+                        <div class="pt-2">
+                            <button class="btn btn-info" type="submit">Add existing</button>
+                        </div>
                     </form>
                 </div>
             </div>

@@ -1,14 +1,23 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
+using StorageAssist.Models;
 
 namespace StorageAssist.Controllers
 {
     public class StorageController : Controller
     {
-        // GET
+        private readonly AppUserContext _appUserContext;
+        private readonly UserManager<ApplicationUser> _user;
+        public StorageController(AppUserContext appUserContext, UserManager<ApplicationUser> user)
+        {
+            _appUserContext = appUserContext;
+            _user = user;
+        }
+            // GET
         [Authorize]
-        [ValidateAntiForgeryToken]
         public IActionResult Index()
         {
             return View();
@@ -17,10 +26,28 @@ namespace StorageAssist.Controllers
         [Authorize]
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public string AddStorage(string storageName, string storageType, string commonResourceId)
+        public string AddNewStorage([Bind("StorageName", "StorageType")] Storage storage)
         {
-            System.Diagnostics.Debug.WriteLine(storageName);
-            System.Diagnostics.Debug.WriteLine(storageType);
+            if (ModelState.IsValid)
+            {
+                var userList = _appUserContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(HttpContext.User))
+                    .ToList();
+                if (userList.Count != 1)
+                {
+                    return "Error";
+                }
+                var user = userList[0];
+
+                var storage = new Storage();
+
+            }
+            return "Test";
+            //return RedirectToAction("Index");
+        }
+
+        public string AddExistingStorage(string commonResourceId)
+        {
+            System.Diagnostics.Debug.WriteLine(commonResourceId);
             return "Test";
             //return RedirectToAction("Index");
         }
