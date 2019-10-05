@@ -18,14 +18,21 @@
         <div class="row">
             <div class="col-12">
                 <form asp-action="AddStorage">
-                    <p>Storage name:</p>
-                    <input type="text" maxlength="50" name="StorageName" />
-                    <p>Storage type:</p>
-                    <input type="radio" name="StorageType" value="Fridge" />Fridge
-                    <input type="radio" name="StorageType" value="Freezer" />Freezer
-                    <input type="radio" name="StorageType" value="Other" />Other
-                    <p>Shared resource id:</p>
-                    <input type="text" maxlength="50" name="CommonResourceId" />
+                    <label class="font-weight-bold">Storage name:</label>
+                    <input class="form-control" type="text" maxlength="50" name="StorageName" />
+                    <div class="form-group">
+                        <label class="font-weight-bold">Storage type:</label>
+                        <div class="form-check">
+                            <input type="radio" name="StorageType" value="Fridge" />
+                            <label class="form-check-label">Fridge</label>
+                            <input type="radio" name="StorageType" value="Freezer" />
+                            <label class="form-check-label">Freezer</label>
+                            <input type="radio" name="StorageType" value="Other" />
+                            <label class="form-check-label">Other</label>
+                        </div>
+                    </div>
+                    <label class="font-weight-bold">Shared resource id:</label>
+                    <input class="form-control" type="text" maxlength="50" name="CommonResourceId" />
                     <div>
                         <button class="btn btn-info" type="submit">Add</button>
                     </div>
