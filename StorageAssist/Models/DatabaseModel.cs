@@ -12,8 +12,8 @@ namespace StorageAssist.Models
 
     public class AppUserContext : IdentityDbContext<ApplicationUser>
     {
-        public AppUserContext( DbContextOptions<AppUserContext> options )
-            : base( options )
+        public AppUserContext(DbContextOptions<AppUserContext> options)
+            : base(options)
         {
         }
 
@@ -21,28 +21,28 @@ namespace StorageAssist.Models
         public DbSet<CommonResource> CommonResources { get; set; }
         public DbSet<UserCommonResource> UserCommonResources { get; set; }
 
-        protected override void OnModelCreating( ModelBuilder modelBuilder )
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //many-to-many relationship between User-CommonResource
             modelBuilder.Entity<UserCommonResource>()
-                .HasKey( uc => new { uc.UserId, uc.CommonResourceId } );
+                .HasKey(uc => new { uc.UserId, uc.CommonResourceId });
             modelBuilder.Entity<UserCommonResource>()
-                .HasOne( uc => uc.User )
-                .WithMany( u => u.UserCommonResource )
-                .HasForeignKey( uc => uc.UserId );
+                .HasOne(uc => uc.User)
+                .WithMany(u => u.UserCommonResource)
+                .HasForeignKey(uc => uc.UserId);
             modelBuilder.Entity<UserCommonResource>()
-                .HasOne( uc => uc.CommonResource )
-                .WithMany( c => c.UserCommonResource )
-                .HasForeignKey( uc => uc.CommonResourceId );
+                .HasOne(uc => uc.CommonResource)
+                .WithMany(c => c.UserCommonResource)
+                .HasForeignKey(uc => uc.CommonResourceId);
 
             //UserCommonResource (join entity) unique key
             modelBuilder.Entity<UserCommonResource>()
-                .HasAlternateKey( uc => uc.UserCommonResourceId );
+                .HasAlternateKey(uc => uc.UserCommonResourceId);
 
             //Product buyDate defaults to current day and time
             modelBuilder.Entity<Product>()
-                .Property( p => p.BuyDate )
-                .HasDefaultValueSql( "getdate()" );
+                .Property(p => p.BuyDate)
+                .HasDefaultValueSql("getdate()");
 
             base.OnModelCreating(modelBuilder);
         }
@@ -63,27 +63,28 @@ namespace StorageAssist.Models
         Count, Weight
     }
 
-    [Table( "Users" )]
+    [Table("Users")]
     public class ApplicationUser : IdentityUser
     {
         //list of join entities (many-to-many)
         public ApplicationUser()
         {
-            UserCommonResource=new List<UserCommonResource>();
+            UserCommonResource = new List<UserCommonResource>();
         }
         public List<UserCommonResource> UserCommonResource { get; set; }
     }
 
-    [Table( "CommonResources" )]
+    [Table("CommonResources")]
     public class CommonResource
     {
         public CommonResource()
         {
-            UserCommonResource=new List<UserCommonResource>();
-            Storages=new List<Storage>();
-            Notes=new List<Note>();
+            UserCommonResource = new List<UserCommonResource>();
+            Storages = new List<Storage>();
+            Notes = new List<Note>();
         }
         //key
+        [Key]
         public string CommonResourceId { get; set; }
         //list of join entities (many-to-many)
         public List<UserCommonResource> UserCommonResource { get; set; }
@@ -94,9 +95,10 @@ namespace StorageAssist.Models
         public string OwnerId { get; set; }
     }
 
-    [Table( "UserCommonResource" )]
+    [Table("UserCommonResource")]
     public class UserCommonResource
     {
+        [Key]
         public string UserCommonResourceId { get; set; }
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
@@ -104,9 +106,10 @@ namespace StorageAssist.Models
         public CommonResource CommonResource { get; set; }
     }
 
-    [Table( "Notes" )]
+    [Table("Notes")]
     public class Note
     {
+        [Key]
         public string NoteId { get; set; }
         public string CommonResourceId { get; set; }
         public CommonResource CommonResource { get; set; }
@@ -121,13 +124,14 @@ namespace StorageAssist.Models
     /// <summary>
     /// Contains list of products, type of storage, commonResource to which it belongs.
     /// </summary>
-    [Table( "Storages" )]
+    [Table("Storages")]
     public class Storage
     {
         public Storage()
         {
-            Products=new List<Product>();
+            Products = new List<Product>();
         }
+        [Key]
         public string StorageId { get; set; }
 
         //Foreign key, common resource containing storage
@@ -146,10 +150,11 @@ namespace StorageAssist.Models
     /// <summary>
     /// Contains information about storage, quantity, type, expiration date, buy date, etc.
     /// </summary>
-    [Table( "Products" )]
+    [Table("Products")]
     public class Product
     {
         //Primary key
+        [Key]
         public string ProductId { get; set; }
 
         //Foreign key, storage containing product
@@ -157,7 +162,7 @@ namespace StorageAssist.Models
         public Storage Storage { get; set; }
 
         //what is inside, to determinate default expiration date
-        [DefaultValue( ProductType.Other )]
+        [DefaultValue(ProductType.Other)]
         public ProductType Type { get; set; }
         [Required]
         public string ProductName { get; set; }
@@ -170,7 +175,7 @@ namespace StorageAssist.Models
 
         public DateTime BuyDate { get; set; }
 
-        [DataType( DataType.Date )]
+        [DataType(DataType.Date)]
         public DateTime? ExpirationDate { get; set; }
 
         public string Comment { get; set; }
