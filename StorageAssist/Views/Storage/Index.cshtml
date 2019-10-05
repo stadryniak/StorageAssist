@@ -8,7 +8,7 @@
     <p class="display-4">Manage storages</p>
 </div>
 <div class="bg-light">
-    <p>
+    <p class="p-3">
         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#AddStorageForm" aria-expanded="false" aria-controls="collapseExample">
             Add storage
         </button>
@@ -16,27 +16,43 @@
 
     <div class="collapse" id="AddStorageForm">
         <div class="row">
-            <div class="col-12">
-                <form asp-action="AddStorage">
-                    <label class="font-weight-bold">Storage name:</label>
-                    <input class="form-control" type="text" maxlength="50" name="StorageName" />
-                    <div class="form-group">
-                        <label class="font-weight-bold">Storage type:</label>
-                        <div class="form-check">
-                            <input type="radio" name="StorageType" value="Fridge" />
-                            <label class="form-check-label">Fridge</label>
-                            <input type="radio" name="StorageType" value="Freezer" />
-                            <label class="form-check-label">Freezer</label>
-                            <input type="radio" name="StorageType" value="Other" />
-                            <label class="form-check-label">Other</label>
+            <div class="col-7">
+                <div class="ml-5">
+                    <h5>Add new storage</h5>
+                    <form class="form-group" asp-action="AddStorage">
+                        <label class="font-weight-bold">Storage name:</label>
+                        <input class="form-control" type="text" maxlength="50" name="storageName" />
+                        <div class="form-group">
+                            <label class="font-weight-bold">Storage type:</label>
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="storageType" value="Fridge" />
+                                    <label class="form-check-label">Fridge</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="storageType" value="Freezer" />
+                                    <label class="form-check-label">Freezer</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="storageType" value="Other" />
+                                    <label class="form-check-label">Other</label>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <label class="font-weight-bold">Shared resource id:</label>
-                    <input class="form-control" type="text" maxlength="50" name="CommonResourceId" />
-                    <div>
-                        <button class="btn btn-info" type="submit">Add</button>
-                    </div>
-                </form>
+                        <div class="pt-2">
+                            <button class="btn btn-info" type="submit">Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-5">
+                <div class="mr-5">
+                    <h5>Add existing storage</h5>
+                    <form class="form-group" asp-action="AddStorage">
+                        <label class="font-weight-bold">StorageID</label>
+                        <input class="form-control" type="text" maxlength="50" name="commonResourceId" />
+                    </form>
+                </div>
             </div>
         </div>
     </div>
