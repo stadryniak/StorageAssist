@@ -85,7 +85,10 @@ namespace StorageAssist.Models
         }
         //key
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string CommonResourceId { get; set; }
+        [Required]
+        public string CommonResourceName { get; set; }
         //list of join entities (many-to-many)
         public List<UserCommonResource> UserCommonResource { get; set; }
         public List<Storage> Storages { get; set; }
@@ -99,6 +102,7 @@ namespace StorageAssist.Models
     public class UserCommonResource
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string UserCommonResourceId { get; set; }
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
@@ -106,10 +110,12 @@ namespace StorageAssist.Models
         public CommonResource CommonResource { get; set; }
     }
 
+
     [Table("Notes")]
     public class Note
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string NoteId { get; set; }
         public string CommonResourceId { get; set; }
         public CommonResource CommonResource { get; set; }
@@ -132,6 +138,7 @@ namespace StorageAssist.Models
             Products = new List<Product>();
         }
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string StorageId { get; set; }
 
         //Foreign key, common resource containing storage
@@ -155,6 +162,7 @@ namespace StorageAssist.Models
     {
         //Primary key
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string ProductId { get; set; }
 
         //Foreign key, storage containing product

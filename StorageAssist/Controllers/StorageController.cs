@@ -23,7 +23,17 @@ namespace StorageAssist.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            return View();
+            var userList = _appUserContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(HttpContext.User))
+                .Include(u => u.UserCommonResource)
+                    .ThenInclude(uc => uc.CommonResource)
+                .ToList();
+            if (userList.Count != 1 || userList[0] == null)
+            {
+                return View("Error");
+            }
+
+            var user = userList[0];
+            return View(user);
         }
 
         [Authorize]
@@ -31,26 +41,35 @@ namespace StorageAssist.Controllers
         [HttpPost]
         public string AddNewStorage([Bind("StorageId, CommonResourceId, CommonResource, OwnerId, StorageName, StorageType, Products")] Storage storage)
         {
-            var user = _appUserContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(HttpContext.User)).ToList()[0];
+            var userList = _appUserContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(HttpContext.User))
+                    .Include(u => u.UserCommonResource)
+                    .ToList();
+            if (userList.Count != 1)
+            {
+                return "Error. Try again or contact administrator.";
+            }
 
+            var user = userList[0];
+
+            storage.OwnerId = _user.GetUserId(HttpContext.User);
             var common = new CommonResource
             {
+                Storages = new List<Storage>()
+                {
+                    storage
+                },
                 Notes = null,
-                OwnerId = user.Id
+                OwnerId = user.Id,
             };
-            common.Storages.Add(storage);
 
-            var join = new UserCommonResource
+            var userCommon = new UserCommonResource()
             {
-                UserCommonResourceId = RandomString(39),
-                UserId = user.Id,
+                CommonResource = common,
                 User = user,
-                CommonResourceId = common.CommonResourceId,
-                CommonResource = common
             };
-            common.UserCommonResource.Add(join);
 
-            user.UserCommonResource.Add(join);
+            user.UserCommonResource.Add(userCommon);
+
             _appUserContext.ApplicationUser.Update(user);
             _appUserContext.SaveChanges();
             return "Added. I believe.";
@@ -69,9 +88,13 @@ namespace StorageAssist.Controllers
 
         public string AddExistingStorage(string commonResourceId)
         {
-            System.Diagnostics.Debug.WriteLine(commonResourceId);
-            return "Test";
-            //return RedirectToAction("Index");
+            var common = new CommonResource()
+            {
+                OwnerId = "ja"
+            };
+            _appUserContext.CommonResources.Add(common);
+            _appUserContext.SaveChanges();
+            return "NoExceptions";
         }
 
         private static Random random = new Random();

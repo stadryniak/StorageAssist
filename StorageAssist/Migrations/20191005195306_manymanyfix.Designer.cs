@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StorageAssist.Models;
 
 namespace StorageAssist.Migrations
 {
     [DbContext(typeof(AppUserContext))]
-    partial class AppUserContextModelSnapshot : ModelSnapshot
+    [Migration("20191005195306_manymanyfix")]
+    partial class manymanyfix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -222,12 +224,7 @@ namespace StorageAssist.Migrations
             modelBuilder.Entity("StorageAssist.Models.CommonResource", b =>
                 {
                     b.Property<string>("CommonResourceId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CommonResourceName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OwnerId")
                         .IsRequired()
@@ -241,7 +238,6 @@ namespace StorageAssist.Migrations
             modelBuilder.Entity("StorageAssist.Models.Note", b =>
                 {
                     b.Property<string>("NoteId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CommonResourceId")
@@ -270,7 +266,6 @@ namespace StorageAssist.Migrations
             modelBuilder.Entity("StorageAssist.Models.Product", b =>
                 {
                     b.Property<string>("ProductId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("BuyDate")
@@ -313,7 +308,6 @@ namespace StorageAssist.Migrations
             modelBuilder.Entity("StorageAssist.Models.Storage", b =>
                 {
                     b.Property<string>("StorageId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CommonResourceId")
@@ -339,22 +333,20 @@ namespace StorageAssist.Migrations
 
             modelBuilder.Entity("StorageAssist.Models.UserCommonResource", b =>
                 {
-                    b.Property<string>("UserId")
+                    b.Property<string>("UserCommonResourceId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CommonResourceId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserCommonResourceId")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("UserId", "CommonResourceId");
-
-                    b.HasAlternateKey("UserCommonResourceId");
+                    b.HasKey("UserCommonResourceId");
 
                     b.HasIndex("CommonResourceId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserCommonResource");
                 });
@@ -435,15 +427,11 @@ namespace StorageAssist.Migrations
                 {
                     b.HasOne("StorageAssist.Models.CommonResource", "CommonResource")
                         .WithMany("UserCommonResource")
-                        .HasForeignKey("CommonResourceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CommonResourceId");
 
                     b.HasOne("StorageAssist.Models.ApplicationUser", "User")
                         .WithMany("UserCommonResource")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }
