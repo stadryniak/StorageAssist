@@ -1,4 +1,5 @@
 ﻿@model ApplicationUser
+
 <div class="bg-light">
     <p class="display-4">Manage storages</p>
 </div>
@@ -35,9 +36,21 @@
                             </div>
                         </div>
 
-                        <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#AddToCommon" aria-expanded="false" aria-controls="collapseExample">
-                            Add to existing resource group
-                        </button>
+                        <div class="mb-2">
+                            <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#CreateCommon" aria-expanded="false" aria-controls="collapseExample">
+                                Add to new resource group
+                            </button>
+                            <div class="form-group collapse" id="CreateCommon">
+                                <label class="font-weight-bold">Common resources name:</label>
+                                <input class="form-control" type="text" maxlength="50" name="commonResourceName" />
+                            </div>
+                        </div>
+
+                        <div>
+                            <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#AddToCommon" aria-expanded="false" aria-controls="collapseExample">
+                                Add to existing resource group
+                            </button>
+                        </div>
                         <div class="form-group collapse" id="AddToCommon">
                             <p class="font-weight-bold">Select resource group</p>
                             <div>
@@ -48,14 +61,14 @@
                                 @foreach (var userCommonResource in Model.UserCommonResource)
                                 {
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="userCommon" value="@userCommonResource.CommonResourceId" />
+                                        <input class="form-check-input" type="radio" name="commonResourceId" value="@userCommonResource.CommonResourceId" />
                                         <label class="form-check-label">@userCommonResource.CommonResource.CommonResourceName</label>
                                     </div>
                                 }
                             </div>
                         </div>
                         <div class="pt-2">
-                            <button class="btn btn-danger" type="submit">Add new</button>
+                            <button class="btn btn-success" type="submit">Add new</button>
                         </div>
                     </form>
                 </div>
@@ -67,11 +80,32 @@
                         <label class="font-weight-bold">StorageID</label>
                         <input class="form-control" type="text" maxlength="50" name="commonResourceId" />
                         <div class="pt-2">
-                            <button class="btn btn-info" type="submit">Add existing</button>
+                            <button class="btn btn-success" type="submit">Add existing</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<div class="bg-light">
+    <ul class="list-group">
+        @foreach (var userCommon in Model.UserCommonResource)
+        {
+            <li class="list-group-item">
+                @userCommon.CommonResource.CommonResourceName
+                <div class="m-1">
+                    <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#@userCommon.CommonResource.CommonResourceId" aria-expanded="false" aria-controls="collapseExample">
+                        List storages
+                    </button>
+                </div>
+                <div class="collapse" id="@userCommon.CommonResource.CommonResourceId">
+                    <ul class="list-group">
+                        @foreach (var storage in userCommon.CommonResource.Storages)
+                    </ul>
+                </div>
+            </li>
+        }
+    </ul>
 </div>
