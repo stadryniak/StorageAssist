@@ -5,7 +5,7 @@
 </div>
 <div class="bg-light">
     <p class="p-3">
-        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#AddStorageForm" aria-expanded="false" aria-controls="collapseExample">
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#AddStorageForm">
             Add storage
         </button>
     </p>
@@ -37,7 +37,7 @@
                         </div>
 
                         <div class="mb-2">
-                            <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#CreateCommon" aria-expanded="false" aria-controls="collapseExample">
+                            <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#CreateCommon">
                                 Add to new resource group
                             </button>
                             <div class="form-group collapse" id="CreateCommon">
@@ -47,7 +47,7 @@
                         </div>
 
                         <div>
-                            <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#AddToCommon" aria-expanded="false" aria-controls="collapseExample">
+                            <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#AddToCommon">
                                 Add to existing resource group
                             </button>
                         </div>
@@ -90,25 +90,27 @@
 </div>
 
 <div class="bg-light">
-    <ul class="list-group">
+    <div>
         @foreach (var userCommon in Model.UserCommonResource)
         {
-            <li class="list-group-item">
-                @userCommon.CommonResource.CommonResourceName
-                <div class="m-1">
-                    <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#@userCommon.CommonResource.CommonResourceId" aria-expanded="false" aria-controls="collapseExample">
+            <div class="list-group-item">
+                <div class="lead font-weight-bold">
+                    @userCommon.CommonResource.CommonResourceName
+                </div>
+                <div class="p-1">
+                    <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#@userCommon.CommonResource.CommonResourceId">
                         List storages
                     </button>
                 </div>
                 <div class="collapse" id="@userCommon.CommonResource.CommonResourceId">
-                    <ul class="list-group">
+                    <div class="list-group">
                         @foreach (var storage in userCommon.CommonResource.Storages)
                         {
-
+                            <div class="list-group-item">@storage.StorageName</div>
                         }
-                    </ul>
+                    </div>
                 </div>
-            </li>
+            </div>
         }
-    </ul>
+    </div>
 </div>

@@ -23,6 +23,11 @@ namespace StorageAssist.Controllers
             var userList = _appUserContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(HttpContext.User))
                 .Include(u => u.UserCommonResource)
                     .ThenInclude(uc => uc.CommonResource)
+                        .ThenInclude(c => c.Storages)
+                            .ThenInclude(s => s.Products)
+                .Include(u => u.UserCommonResource)
+                    .ThenInclude(uc => uc.CommonResource)
+                        .ThenInclude(c => c.Notes)
                 .ToList();
             if (userList.Count != 1 || userList[0] == null)
             {
@@ -46,7 +51,7 @@ namespace StorageAssist.Controllers
             //validate if user is logged in and only one user have given Id
             if (userList.Count != 1)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Storage");
             }
             var user = userList[0];
             storage.OwnerId = user.Id;
@@ -60,14 +65,14 @@ namespace StorageAssist.Controllers
                     .ToList();
                 if (commonList.Count != 1)
                 {
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", "Storage");
                 }
 
                 common = commonList[0];
                 common.Storages.Add(storage);
                 _appUserContext.CommonResources.Update(common);
                 _appUserContext.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Storage");
             }
 
             //if commonResourceId is not specified
@@ -91,7 +96,7 @@ namespace StorageAssist.Controllers
             _appUserContext.ApplicationUser.Update(user);
             _appUserContext.SaveChanges();
 
-            return Index();
+            return RedirectToAction("Index", "Storage");
         }
 
 
