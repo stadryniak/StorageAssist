@@ -41,6 +41,7 @@ namespace StorageAssist.Controllers
         [Authorize]
         [ValidateAntiForgeryToken]
         [HttpPost]
+        //TODO: Chceck for empty fields, check if commonResourceName exist in users commons. Or fix view via some magic like random string generation for ids
         public IActionResult AddNewStorage([Bind("StorageId, CommonResourceId, CommonResource, OwnerId, StorageName, StorageType, Products")] Storage storage, string commonResourceId, string commonResourceName)
         {
             // Probably overcomplicated, split into functions at some point 
