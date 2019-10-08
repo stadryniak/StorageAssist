@@ -54,10 +54,14 @@
                         <div class="form-group collapse" id="AddToCommon">
                             <p class="font-weight-bold">Select resource group</p>
                             <div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="commonResourceId" value="" />
+                                    <label class="form-check-label">New resource group</label>
+                                </div>
                                 @foreach (var userCommonResource in Model.UserCommonResource)
                                 {
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="commonResourceId" value="@userCommonResource.CommonResourceId" />
+                                        <input class="form-check-input" type="radio" name="commonResourceId" value="@userCommonResource.CommonResourceId"/>
                                         <label class="form-check-label">@userCommonResource.CommonResource.CommonResourceName</label>
                                     </div>
                                 }

@@ -57,7 +57,7 @@ namespace StorageAssist.Controllers
             var user = userList[0];
             storage.OwnerId = user.Id;
 
-            var common = new CommonResource();
+            CommonResource common;
             //if commonResourceId specified, get it from database, add storage
             if (!string.IsNullOrEmpty(commonResourceId))
             {
