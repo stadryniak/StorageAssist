@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
+using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -41,9 +43,14 @@ namespace StorageAssist.Controllers
         [Authorize]
         [ValidateAntiForgeryToken]
         [HttpPost]
-        //TODO: Chceck for empty fields, check if commonResourceName exist in users commons. Or fix view via some magic like random string generation for ids
+        //TODO: Check for empty fields, check if commonResourceName exist in users commons. Or fix view via some magic like random string generation for ids
         public IActionResult AddNewStorage([Bind("StorageId, CommonResourceId, CommonResource, OwnerId, StorageName, StorageType, Products")] Storage storage, string commonResourceId, string commonResourceName)
         {
+            if (string.IsNullOrEmpty(storage.StorageName) || (string.IsNullOrEmpty(commonResourceId) && string.IsNullOrEmpty(commonResourceName)))
+            {
+                var error = new ErrorViewModel { RequestId = Activity.Current.Id };
+                return RedirectToAction("Index", "Error", error);
+            }
             // Probably overcomplicated, split into functions at some point 
             //get user and she's/he's CommonResources from database
             var userList = _appUserContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(HttpContext.User))
@@ -106,7 +113,7 @@ namespace StorageAssist.Controllers
 
         public string AddExistingStorage(string commonResourceId)
         {
-            
+
             return "NoExceptions";
         }
     }
