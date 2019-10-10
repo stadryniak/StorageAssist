@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -44,11 +45,11 @@ namespace StorageAssist.Controllers
         [ValidateAntiForgeryToken]
         [HttpPost]
         //TODO: Check for empty fields, check if commonResourceName exist in users commons. Or fix view via some magic like random string generation for ids
-        public IActionResult AddNewStorage([Bind("StorageId, CommonResourceId, CommonResource, OwnerId, StorageName, StorageType, Products")] Storage storage, string commonResourceId, string commonResourceName)
+        public async Task<IActionResult> AddNewStorage([Bind("StorageId, CommonResourceId, CommonResource, OwnerId, StorageName, StorageType, Products")] Storage storage, string commonResourceId, string commonResourceName)
         {
             if (string.IsNullOrEmpty(storage.StorageName) || (string.IsNullOrEmpty(commonResourceId) && string.IsNullOrEmpty(commonResourceName)))
             {
-                var error = new ErrorViewModel { RequestId = Activity.Current.Id };
+                var error = new ErrorViewModel();
                 return RedirectToAction("Index", "Error", error);
             }
             // Probably overcomplicated, split into functions at some point 
@@ -59,7 +60,8 @@ namespace StorageAssist.Controllers
             //validate if user is logged in and only one user have given Id
             if (userList.Count != 1)
             {
-                return RedirectToAction("Index", "Storage");
+                var error = new ErrorViewModel();
+                return RedirectToAction("Index", "Error", error);
             }
             var user = userList[0];
             storage.OwnerId = user.Id;
@@ -73,7 +75,8 @@ namespace StorageAssist.Controllers
                     .ToList();
                 if (commonList.Count != 1)
                 {
-                    return RedirectToAction("Index", "Storage");
+                    var error = new ErrorViewModel();
+                    return RedirectToAction("Index", "Error", error);
                 }
 
                 common = commonList[0];
@@ -102,7 +105,7 @@ namespace StorageAssist.Controllers
             user.UserCommonResource.Add(join);
 
             _appUserContext.ApplicationUser.Update(user);
-            _appUserContext.SaveChanges();
+            await _appUserContext.SaveChangesAsync();
 
             return RedirectToAction("Index", "Storage");
         }
