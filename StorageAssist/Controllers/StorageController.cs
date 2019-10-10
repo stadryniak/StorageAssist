@@ -44,15 +44,14 @@ namespace StorageAssist.Controllers
         [Authorize]
         [ValidateAntiForgeryToken]
         [HttpPost]
-        //TODO: Check for empty fields, check if commonResourceName exist in users commons. Or fix view via some magic like random string generation for ids
         public async Task<IActionResult> AddNewStorage([Bind("StorageId, CommonResourceId, CommonResource, OwnerId, StorageName, StorageType, Products")] Storage storage, string commonResourceId, string commonResourceName)
         {
+            // Probably overcomplicated, split into functions at some point 
             if (string.IsNullOrEmpty(storage.StorageName) || (string.IsNullOrEmpty(commonResourceId) && string.IsNullOrEmpty(commonResourceName)))
             {
                 var error = new ErrorViewModel();
                 return RedirectToAction("Index", "Error", error);
             }
-            // Probably overcomplicated, split into functions at some point 
             //get user and she's/he's CommonResources from database
             var userList = _appUserContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(HttpContext.User))
                     .Include(u => u.UserCommonResource)
