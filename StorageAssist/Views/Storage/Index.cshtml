@@ -114,8 +114,11 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <button class="btn btn-sm btn-secondary">Add product</button>
+                                    <form>
+                                        <button class="btn btn-sm btn-secondary" name="storageId" value="@storage.StorageId" asp-controller="Product" asp-action="AddProduct">Add product</button>
+                                    </form>
                                 </div>
+
 
                                 <div class="collapse" id="@RemoveLeadingDigits(storage.StorageId)">
                                     <div class="list-group">
