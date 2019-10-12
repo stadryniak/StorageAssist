@@ -141,22 +141,22 @@
                                 <div class="list-group pt-1">
                                     <div class="list-group-item">
                                         <div class="row">
-                                            <div class="col-2">Product name</div>
-                                            <div class="col-1">Bulk</div>
-                                            <div class="col-2">Buy date</div>
-                                            <div class="col-2">Expiration date</div>
-                                            <div class="col-3">Comment</div>
+                                            <div class="col-2 text-center">Product name</div>
+                                            <div class="col-1 text-center">Bulk</div>
+                                            <div class="col-2 text-center">Buy date</div>
+                                            <div class="col-2 text-center">Expiration date</div>
+                                            <div class="col-3 text-center">Comment</div>
                                         </div>
                                     </div>
                                     @foreach (var product in storage.Products)
                                     {
                                         <div class="list-group-item">
                                             <div class="row">
-                                                <div class="col-2">@product.ProductName</div>
-                                                <div class="col-1">@product.Quantity</div>
-                                                <div class="col-2">@product.BuyDate.ToString("dd-MM-yyyy")</div>
-                                                <div class="col-2">@product.ExpirationDate?.ToString("dd-MM-yyyy")</div>
-                                                <div class="col-3">@product.Comment</div>
+                                                <div class="col-2 text-center">@product.ProductName</div>
+                                                <div class="col-1 text-center">@product.Quantity</div>
+                                                <div class="col-2 text-center">@product.BuyDate.ToString("dd-MM-yyyy")</div>
+                                                <div class="col-2 text-center @ExpirationComes(product.ExpirationDate)">@product.ExpirationDate?.ToString("dd-MM-yyyy")</div>
+                                                <div class="col-3 text-center">@product.Comment</div>
                                                 <div class="col-2">
                                                     <form method="post">
                                                         <button class="btn btn-sm btn-danger" name="productId" value="@product.ProductId" asp-controller="Product" asp-action="DeleteProduct">Delete product</button>
@@ -189,4 +189,16 @@
         return str;
     }
 
+    public string ExpirationComes(DateTime? date)
+    {
+        if (date ==null || ((DateTime) date - DateTime.Now).TotalDays > 3)
+        {
+            return "";
+        }
+        if (((DateTime) date - DateTime.Now).TotalDays < 2)
+        {
+            return "bg-danger rounded";
+        }
+        return "bg-warning rounded";
+    }
 }
