@@ -153,5 +153,10 @@ namespace StorageAssist.Controllers
 
             return RedirectToAction("Index");
         }
+
+        public IActionResult DeleteCommonResources(string commonResourceId)
+        {
+            return RedirectToAction("Index");
+        }
     }
 }

@@ -103,9 +103,15 @@
                         @userCommon.CommonResource.CommonResourceName
                     </div>
                     <div id="@RemoveLeadingDigits(RemoveLeadingDigits(userCommon.CommonResourceId).Substring(1))" class="collapse">
-                        <span class="text-muted">
-                            CommonID: @userCommon.CommonResourceId
-                        </span>
+                        <div class="row">
+                            <div class="text-muted col-8">
+                                CommonID: @userCommon.CommonResourceId
+                            </div>
+                            <form class="form-group col-4" asp-controller="Storage" asp-action="DeleteCommonResources">
+                                <button class="btn btn-sm btn-danger">Delete common resources</button>
+                                <input type="hidden" name="commonResourceId" value="@userCommon.CommonResource.CommonResourceId" />
+                            </form>
+                        </div>
                     </div>
                 </div>
                 <div>
