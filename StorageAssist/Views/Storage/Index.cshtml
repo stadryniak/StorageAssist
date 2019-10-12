@@ -97,10 +97,15 @@
     <div class="list-group">
         @foreach (var userCommon in Model.UserCommonResource)
         {
-            <div class="card m-1">
+            <div class="card m-1 bg-light">
                 <div class="card-header">
-                    <div class="h4" data-toggle="collapse" data-target="#@RemoveLeadingDigits(RemoveLeadingDigits(userCommon.CommonResourceId).Substring(1))">
+                    <div class="h3" data-toggle="collapse" data-target="#@RemoveLeadingDigits(RemoveLeadingDigits(userCommon.CommonResourceId).Substring(1))">
                         @userCommon.CommonResource.CommonResourceName
+                    </div>
+                    <div data-toggle="collapse" data-target="#@StoragesIdString(userCommon)">
+                        <p>
+                            Show all
+                        </p>
                     </div>
                     <div id="@RemoveLeadingDigits(RemoveLeadingDigits(userCommon.CommonResourceId).Substring(1))" class="collapse">
                         <div class="row">
@@ -119,18 +124,18 @@
                         Storage list
                     </button>
                 </div>
-                <div class="collapse" id="@RemoveLeadingDigits(userCommon.CommonResource.CommonResourceId)">
+                <div class="collapse bg-light" id="@RemoveLeadingDigits(userCommon.CommonResource.CommonResourceId)">
 
                     @foreach (var storage in userCommon.CommonResource.Storages)
                     {
-                        <div class="list-group-item">
+                        <div class="list-group-item bg-light">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <div class="font-weight-bold" data-toggle="collapse" data-target="#@RemoveLeadingDigits(storage.StorageId)">
+                                    <div class="h4 text-center" data-toggle="collapse" data-target="#@RemoveLeadingDigits(storage.StorageId)">
                                         @storage.StorageName
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-6 text-right">
                                     <form method="post">
                                         <button class="btn btn-sm btn-secondary" name="storageId" value="@storage.StorageId" asp-controller="Product" asp-action="AddProduct">Add product</button>
                                     </form>
@@ -139,18 +144,18 @@
 
                             <div class="collapse" id="@RemoveLeadingDigits(storage.StorageId)">
                                 <div class="list-group pt-1">
-                                    <div class="list-group-item">
+                                    <div class="list-group-item bg-light">
                                         <div class="row">
-                                            <div class="col-2 text-center">Product name</div>
-                                            <div class="col-1 text-center">Bulk</div>
-                                            <div class="col-2 text-center">Buy date</div>
-                                            <div class="col-2 text-center">Expiration date</div>
-                                            <div class="col-3 text-center">Comment</div>
+                                            <div class="col-2 text-center h6">Product name</div>
+                                            <div class="col-1 text-center h6">Bulk</div>
+                                            <div class="col-2 text-center h6">Buy date</div>
+                                            <div class="col-2 text-center h6">Expiration date</div>
+                                            <div class="col-3 text-center h6">Comment</div>
                                         </div>
                                     </div>
                                     @foreach (var product in storage.Products)
                                     {
-                                        <div class="list-group-item">
+                                        <div class="list-group-item bg-light">
                                             <div class="row">
                                                 <div class="col-2 text-center">@product.ProductName</div>
                                                 <div class="col-1 text-center">@product.Quantity</div>
@@ -191,14 +196,26 @@
 
     public string ExpirationComes(DateTime? date)
     {
-        if (date ==null || ((DateTime) date - DateTime.Now).TotalDays > 3)
+        if (date == null || ((DateTime)date - DateTime.Now).TotalDays > 3)
         {
             return "";
         }
-        if (((DateTime) date - DateTime.Now).TotalDays < 2)
+        if (((DateTime)date - DateTime.Now).TotalDays < 2)
         {
             return "bg-danger rounded";
         }
         return "bg-warning rounded";
     }
+
+    private string StoragesIdString(UserCommonResource userCommon)
+    {
+        string idString = "";
+        foreach (var storage in userCommon.CommonResource.Storages)
+        {
+            idString += RemoveLeadingDigits(storage.StorageId) + ",#";
+        }
+        idString += RemoveLeadingDigits(userCommon.CommonResource.CommonResourceId);
+        return idString;
+    }
+
 }
