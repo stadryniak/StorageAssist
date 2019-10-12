@@ -70,5 +70,38 @@ namespace StorageAssist.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<IActionResult> DeleteProduct(string productId, string storageId)
+        {
+            // get requested storage from db
+            var storageList = _appUserContext.Storages.Where(s => s.StorageId == storageId)
+                .Include(s => s.Products)
+                .ToList();
+            // check if only one storage is in list and if it belongs to current user. If not return error
+            if (storageList.Count != 1 || storageList[0].OwnerId != _user.GetUserId(HttpContext.User))
+            {
+                var error = new ErrorViewModel();
+                return RedirectToAction("Index", "Error", error);
+            }
+            var storage = storageList[0];
+
+            // get product
+            var productList = storage.Products.Where(p => p.ProductId == productId).ToList();
+            if (productList.Count != 1)
+            {
+                var error = new ErrorViewModel();
+                return RedirectToAction("Index", "Error", error);
+            }
+            var product = productList[0];
+
+            // delete product
+            storage.Products.Remove(product);
+
+            // update database
+            _appUserContext.Storages.Update(storage);
+            await _appUserContext.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
+
     }
 }

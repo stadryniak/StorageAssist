@@ -118,15 +118,25 @@
                                         <button class="btn btn-sm btn-secondary" name="storageId" value="@storage.StorageId" asp-controller="Product" asp-action="AddProduct">Add product</button>
                                     </form>
                                 </div>
+                            </div>
 
+                            <div class="collapse" id="@RemoveLeadingDigits(storage.StorageId)">
+                                <div class="list-group pt-1">
+                                    @foreach (var product in storage.Products)
+                                    {
+                                        <div class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-10">@product.ProductName</div>
+                                                <div class="col-2">
+                                                    <form method="post">
+                                                        <button class="btn btn-sm btn-danger" name="productId" value="@product.ProductId" asp-controller="Product" asp-action="DeleteProduct">Delete product</button>
+                                                        <input type="hidden" name="storageId" value="@storage.StorageId" />
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                <div class="collapse" id="@RemoveLeadingDigits(storage.StorageId)">
-                                    <div class="list-group">
-                                        @foreach (var product in storage.Products)
-                                        {
-                                            <div class="ml-4 mt-2">@product.ProductName</div>
-                                        }
-                                    </div>
+                                    }
                                 </div>
                             </div>
                         </div>
