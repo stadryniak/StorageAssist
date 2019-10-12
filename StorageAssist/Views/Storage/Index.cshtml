@@ -75,9 +75,9 @@
             </div>
             <div class="col-5">
                 <div class="mr-5">
-                    <h5>Add existing storage</h5>
-                    <form class="form-group" asp-action="AddExistingStorage">
-                        <label class="font-weight-bold">StorageID</label>
+                    <h5>Add existing common</h5>
+                    <form class="form-group" asp-action="AddExistingCommon">
+                        <label class="font-weight-bold">CommonID</label>
                         <input class="form-control" type="text" maxlength="50" name="commonResourceId" />
                         <div class="pt-2">
                             <button class="btn btn-success" type="submit">Add existing</button>
@@ -94,8 +94,15 @@
         @foreach (var userCommon in Model.UserCommonResource)
         {
             <div class="card m-1">
-                <div class="card-header h4">
-                    @userCommon.CommonResource.CommonResourceName
+                <div class="card-header">
+                    <div class="h4" data-toggle="collapse" data-target="#@RemoveLeadingDigits(userCommon.CommonResourceId)">
+                        @userCommon.CommonResource.CommonResourceName
+                    </div>
+                    <div id="@RemoveLeadingDigits(userCommon.CommonResourceId)" class="collapse">
+                        <span class="text-muted">
+                            CommonID: @userCommon.CommonResourceId
+                        </span>
+                    </div>
                 </div>
                 <div>
                     <button class="btn btn-info btn-sm m-1" type="button" data-toggle="collapse" data-target="#@RemoveLeadingDigits(userCommon.CommonResource.CommonResourceId)">

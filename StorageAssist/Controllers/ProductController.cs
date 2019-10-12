@@ -54,7 +54,7 @@ namespace StorageAssist.Controllers
                 .Include(s => s.Products)
                 .ToList();
             // check if only one storage is in list and if it belongs to current user. If not return error
-            if (storageList.Count != 1 || storageList[0].OwnerId != _user.GetUserId(HttpContext.User))
+            if (storageList.Count != 1)
             {
                 var error = new ErrorViewModel();
                 return RedirectToAction("Index", "Error", error);
@@ -77,7 +77,7 @@ namespace StorageAssist.Controllers
                 .Include(s => s.Products)
                 .ToList();
             // check if only one storage is in list and if it belongs to current user. If not return error
-            if (storageList.Count != 1 || storageList[0].OwnerId != _user.GetUserId(HttpContext.User))
+            if (storageList.Count != 1)
             {
                 var error = new ErrorViewModel();
                 return RedirectToAction("Index", "Error", error);

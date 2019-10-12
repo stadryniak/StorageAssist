@@ -63,6 +63,7 @@ namespace StorageAssist.Controllers
                 return RedirectToAction("Index", "Error", error);
             }
             var user = userList[0];
+
             storage.OwnerId = user.Id;
 
             CommonResource common;
@@ -113,10 +114,44 @@ namespace StorageAssist.Controllers
 
 
 
-        public string AddExistingStorage(string commonResourceId)
+        public async Task<IActionResult> AddExistingCommon(string commonResourceId)
         {
+            //get user and she's/he's CommonResources from database
+            var userList = _appUserContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(HttpContext.User))
+                .Include(u => u.UserCommonResource)
+                .ToList();
+            //validate if user is logged in and only one user have given Id
+            if (userList.Count != 1)
+            {
+                var error = new ErrorViewModel();
+                return RedirectToAction("Index", "Error", error);
+            }
+            var user = userList[0];
 
-            return "NoExceptions";
+            //get requested commonResources
+            var commonList = _appUserContext.CommonResources.Where(c => c.CommonResourceId == commonResourceId).ToList();
+            if (commonList.Count != 1)
+            {
+                var error = new ErrorViewModel();
+                return RedirectToAction("Index", "Error", error);
+            }
+            var common = commonList[0];
+
+            //add commonResource to user
+            var join = new UserCommonResource
+            {
+                UserId = user.Id,
+                User = user,
+                CommonResourceId = commonResourceId,
+                CommonResource = common
+            };
+            user.UserCommonResource.Add(join);
+
+            //save to database
+            _appUserContext.ApplicationUser.Update(user);
+            await _appUserContext.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
     }
 }
