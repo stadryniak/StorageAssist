@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StorageAssist.Models;
 
 namespace StorageAssist.Migrations
 {
     [DbContext(typeof(AppUserContext))]
-    partial class AppUserContextModelSnapshot : ModelSnapshot
+    [Migration("20191011230030_floatToDouble")]
+    partial class floatToDouble
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -288,11 +290,14 @@ namespace StorageAssist.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Quantity")
-                        .HasColumnType("float");
+                    b.Property<int?>("QuantityCount")
+                        .HasColumnType("int");
 
                     b.Property<int>("QuantityType")
                         .HasColumnType("int");
+
+                    b.Property<double?>("QuantityWeight")
+                        .HasColumnType("float");
 
                     b.Property<string>("StorageId")
                         .HasColumnType("nvarchar(450)");

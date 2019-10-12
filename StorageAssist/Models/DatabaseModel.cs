@@ -20,6 +20,7 @@ namespace StorageAssist.Models
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
         public DbSet<CommonResource> CommonResources { get; set; }
         public DbSet<UserCommonResource> UserCommonResources { get; set; }
+        public DbSet<Storage> Storages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -178,8 +179,7 @@ namespace StorageAssist.Models
         //determinate which Quantity metric should be applied
         [Required]
         public QuantityType QuantityType { get; set; }
-        public int? QuantityCount { get; set; }
-        public float? QuantityWeight { get; set; }
+        public double Quantity { get; set; }
 
         public DateTime BuyDate { get; set; }
 
