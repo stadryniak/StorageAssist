@@ -95,10 +95,10 @@
         {
             <div class="card m-1">
                 <div class="card-header">
-                    <div class="h4" data-toggle="collapse" data-target="#@RemoveLeadingDigits(userCommon.CommonResourceId)">
+                    <div class="h4" data-toggle="collapse" data-target="#@RemoveLeadingDigits(RemoveLeadingDigits(userCommon.CommonResourceId).Substring(1))">
                         @userCommon.CommonResource.CommonResourceName
                     </div>
-                    <div id="@RemoveLeadingDigits(userCommon.CommonResourceId)" class="collapse">
+                    <div id="@RemoveLeadingDigits(RemoveLeadingDigits(userCommon.CommonResourceId).Substring(1))" class="collapse">
                         <span class="text-muted">
                             CommonID: @userCommon.CommonResourceId
                         </span>
@@ -159,7 +159,7 @@
 
     public string RemoveLeadingDigits(string str)
     {
-        while (char.IsDigit(str[0]))
+        while (char.IsDigit(str[0]) || str[0]=='-')
         {
             str = str.Substring(1);
         }
