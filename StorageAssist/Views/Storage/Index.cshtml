@@ -1,8 +1,11 @@
-﻿@model ApplicationUser
-
+﻿@using Microsoft.CodeAnalysis.CSharp.Syntax
+@model ApplicationUser
+<!--Title-->
 <div class="bg-light">
     <p class="display-4">Manage storages</p>
 </div>
+
+<!--Add storage-->
 <div class="bg-light">
     <p class="p-3">
         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#AddStorageForm">
@@ -89,6 +92,7 @@
     </div>
 </div>
 
+<!--List common resources-->
 <div class="bg-light">
     <div class="list-group">
         @foreach (var userCommon in Model.UserCommonResource)
@@ -129,11 +133,24 @@
 
                             <div class="collapse" id="@RemoveLeadingDigits(storage.StorageId)">
                                 <div class="list-group pt-1">
+                                    <div class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-2">Product name</div>
+                                            <div class="col-1">Bulk</div>
+                                            <div class="col-2">Buy date</div>
+                                            <div class="col-2">Expiration date</div>
+                                            <div class="col-3">Comment</div>
+                                        </div>
+                                    </div>
                                     @foreach (var product in storage.Products)
                                     {
                                         <div class="list-group-item">
                                             <div class="row">
-                                                <div class="col-10">@product.ProductName</div>
+                                                <div class="col-2">@product.ProductName</div>
+                                                <div class="col-1">@product.Quantity</div>
+                                                <div class="col-2">@product.BuyDate.ToString("dd-MM-yyyy")</div>
+                                                <div class="col-2">@product.ExpirationDate?.ToString("dd-MM-yyyy")</div>
+                                                <div class="col-3">@product.Comment</div>
                                                 <div class="col-2">
                                                     <form method="post">
                                                         <button class="btn btn-sm btn-danger" name="productId" value="@product.ProductId" asp-controller="Product" asp-action="DeleteProduct">Delete product</button>
@@ -159,7 +176,7 @@
 
     public string RemoveLeadingDigits(string str)
     {
-        while (char.IsDigit(str[0]) || str[0]=='-')
+        while (char.IsDigit(str[0]) || str[0] == '-')
         {
             str = str.Substring(1);
         }
