@@ -49,22 +49,12 @@ namespace StorageAssist.Controllers
         [Authorize]
         public async Task<IActionResult> AddProductDb([Bind("StorageId, ProductName, Type, QuantityType, Quantity, BuyDate, ExpirationDate, Comment")] Product product)
         {
-            //get user and she's/he's CommonResources from database
-            var userList = _appUserContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(HttpContext.User))
-                .Include(u => u.UserCommonResource)
-                .ToList();
-            //validate if user is logged in and only one user have given Id
-            if (userList.Count != 1)
-            {
-                var error = new ErrorViewModel();
-                return RedirectToAction("Index", "Error", error);
-            }
-            var user = userList[0];
-
+            // get requested storage from db
             var storageList = _appUserContext.Storages.Where(s => s.StorageId == product.StorageId)
                 .Include(s => s.Products)
                 .ToList();
-            if (storageList.Count != 1)
+            // check if only one storage is in list and if it belongs to current user. If not return error
+            if (storageList.Count != 1 || storageList[0].OwnerId != _user.GetUserId(HttpContext.User))
             {
                 var error = new ErrorViewModel();
                 return RedirectToAction("Index", "Error", error);
@@ -73,9 +63,9 @@ namespace StorageAssist.Controllers
             storage.Products.Add(product);
             product.Storage = storage;
 
+            // update and save db
             _appUserContext.Storages.Update(storage);
             await _appUserContext.SaveChangesAsync();
-
 
             return RedirectToAction("Index");
         }
