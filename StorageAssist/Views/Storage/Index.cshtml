@@ -103,7 +103,7 @@
                         @userCommon.CommonResource.CommonResourceName
                     </div>
                     <div data-toggle="collapse" data-target="#@StoragesIdString(userCommon)">
-                        <p>
+                        <p class="m-0">
                             Show all
                         </p>
                     </div>
@@ -162,9 +162,9 @@
                                                 <div class="col-2 text-center">@product.BuyDate.ToString("dd-MM-yyyy")</div>
                                                 <div class="col-2 text-center @ExpirationComes(product.ExpirationDate)">@product.ExpirationDate?.ToString("dd-MM-yyyy")</div>
                                                 <div class="col-3 text-center">@product.Comment</div>
-                                                <div class="col-2">
+                                                <div class="col-2 text-right">
                                                     <form method="post">
-                                                        <button class="btn btn-sm btn-danger" name="productId" value="@product.ProductId" asp-controller="Product" asp-action="DeleteProduct">Delete product</button>
+                                                        <button class="btn btn-sm btn-danger" name="productId" value="@product.ProductId" asp-controller="Product" asp-action="DeleteProduct">Delete</button>
                                                         <input type="hidden" name="storageId" value="@storage.StorageId" />
                                                     </form>
                                                 </div>
