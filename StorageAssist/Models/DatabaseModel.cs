@@ -21,6 +21,7 @@ namespace StorageAssist.Models
         public DbSet<CommonResource> CommonResources { get; set; }
         public DbSet<UserCommonResource> UserCommonResources { get; set; }
         public DbSet<Storage> Storages { get; set; }
+        public DbSet<Note> Notes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

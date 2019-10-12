@@ -113,7 +113,8 @@ namespace StorageAssist.Controllers
 
 
 
-
+        [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddExistingCommon(string commonResourceId)
         {
             //get user and she's/he's CommonResources from database
@@ -154,8 +155,57 @@ namespace StorageAssist.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult DeleteCommonResources(string commonResourceId)
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> DeleteCommonResources(string commonResourceId)
         {
+            //get user and she's/he's CommonResources from database
+            var userList = _appUserContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(HttpContext.User))
+                .Include(u => u.UserCommonResource)
+                    .ThenInclude(uc => uc.CommonResource)
+                .ToList();
+            //validate if user is logged in and only one user have given Id
+            if (userList.Count != 1)
+            {
+                var error = new ErrorViewModel();
+                return RedirectToAction("Index", "Error", error);
+            }
+            var user = userList[0];
+
+            //get common resource
+            var commonList = _appUserContext.CommonResources.Where(c => c.CommonResourceId == commonResourceId)
+                .Include(c => c.UserCommonResource)
+                .Include(c => c.Notes)
+                .Include(c => c.Storages)
+                    .ThenInclude(s => s.Products)
+                .ToList();
+            if (commonList.Count != 1)
+            {
+                var error = new ErrorViewModel();
+                return RedirectToAction("Index", "Error", error);
+            }
+            var common = commonList[0];
+
+            //check if user is owner of common
+            if (common.OwnerId == user.Id)
+            {
+                common.Notes.Clear();
+                common.Storages.Clear();
+                common.UserCommonResource.Clear();
+                
+                _appUserContext.CommonResources.Remove(common);
+                await _appUserContext.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+
+            //remove common from user list
+            var usersCommon = common.UserCommonResource.Where(uc => uc.UserId == user.Id).ToList();
+            foreach (var userCommonResource in usersCommon)
+            {
+                _appUserContext.UserCommonResources.Remove(userCommonResource);
+            }
+            await _appUserContext.SaveChangesAsync();
+
             return RedirectToAction("Index");
         }
     }
