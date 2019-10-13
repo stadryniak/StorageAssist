@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +11,7 @@ namespace StorageAssist.Controllers
     public class ProductController : Controller
     {
         private readonly AppUserContext _appUserContext;
+        // ReSharper disable once NotAccessedField.Local
         private readonly UserManager<IdentityUser> _user;
         public ProductController(AppUserContext appUserContext, UserManager<IdentityUser> user)
         {
