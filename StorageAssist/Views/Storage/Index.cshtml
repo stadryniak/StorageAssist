@@ -135,7 +135,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6 text-right">
-                                    <form method="post">
+                                    <form class="mr-4" method="post">
                                         <button class="btn btn-sm btn-secondary" name="storageId" value="@storage.StorageId" asp-controller="Product" asp-action="AddProduct">Add product</button>
                                     </form>
                                 </div>
@@ -145,10 +145,10 @@
                                 <div class="list-group pt-1">
                                     <div class="list-group-item bg-light">
                                         <div class="row">
-                                            <div class="col-2 text-center h6">Product name</div>
+                                            <div class="col-2 text-center h6">Product</div>
                                             <div class="col-1 text-center h6">Bulk</div>
                                             <div class="col-2 text-center h6">Buy date</div>
-                                            <div class="col-2 text-center h6">Expiration date</div>
+                                            <div class="col-2 text-center h6">Expire</div>
                                             <div class="col-3 text-center h6">Comment</div>
                                         </div>
                                     </div>
@@ -162,7 +162,11 @@
                                                 <div class="col-2 text-center @ExpirationComes(product.ExpirationDate)">@product.ExpirationDate?.ToString("dd-MM-yyyy")</div>
                                                 <div class="col-3 text-center">@product.Comment</div>
                                                 <div class="col-2 text-right">
-                                                    <form method="post">
+                                                    <form class="d-inline" method="post">
+                                                        <button class="btn btn-sm btn-success" name="productId" value="@product.ProductId" asp-controller="Product" asp-action="EditProduct">Edit</button>
+                                                        <input type="hidden" name="storageId" value="@storage.StorageId" />
+                                                    </form>
+                                                    <form class="d-inline" method="post">
                                                         <button class="btn btn-sm btn-danger" name="productId" value="@product.ProductId" asp-controller="Product" asp-action="DeleteProduct">Delete</button>
                                                         <input type="hidden" name="storageId" value="@storage.StorageId" />
                                                     </form>

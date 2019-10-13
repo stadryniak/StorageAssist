@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -101,5 +102,19 @@ namespace StorageAssist.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
+        [HttpPost]
+        public IActionResult EditProduct(Product product)
+        {
+            return View(product);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult EditProductDb(Product product)
+        {
+            throw new NotImplementedException();
+            //return RedirectToAction("Index");
+        }
     }
 }
