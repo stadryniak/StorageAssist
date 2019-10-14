@@ -187,10 +187,16 @@ namespace StorageAssist.Controllers
             //check if user is owner of common
             if (common.OwnerId == user.Id)
             {
-                common.Notes.Clear();
-                common.Storages.Clear();
                 common.UserCommonResource.Clear();
-                
+                //remove dependent resources
+                _appUserContext.Notes.RemoveRange(common.Notes);
+                _appUserContext.UserCommonResources.RemoveRange(common.UserCommonResource);
+                foreach (var storage in common.Storages)
+                {
+                    _appUserContext.Products.RemoveRange(storage.Products);
+                }
+                _appUserContext.Storages.RemoveRange(common.Storages);
+
                 _appUserContext.CommonResources.Remove(common);
                 await _appUserContext.SaveChangesAsync();
                 return RedirectToAction("Index");

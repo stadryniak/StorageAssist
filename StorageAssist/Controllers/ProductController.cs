@@ -104,9 +104,12 @@ namespace StorageAssist.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult EditProduct(string productId)
+        public async Task<IActionResult> EditProduct(string productId)
         {
-            return View();
+            //get product from db
+            var product = await _appUserContext.Products.FirstOrDefaultAsync(p => p.ProductId == productId);
+
+            return View(product);
         }
 
         [Authorize]

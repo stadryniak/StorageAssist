@@ -22,6 +22,7 @@ namespace StorageAssist.Models
         public DbSet<UserCommonResource> UserCommonResources { get; set; }
         public DbSet<Storage> Storages { get; set; }
         public DbSet<Note> Notes { get; set; }
+        public DbSet<Product> Products { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -57,7 +58,7 @@ namespace StorageAssist.Models
 
     public enum ProductType
     {
-        Meat, Vegetables, Fruits, Dairy, Candy, Other
+        Meat, Vegetables, Fruits, Dairy, Candy, Baking, Other
     }
 
     public enum QuantityType

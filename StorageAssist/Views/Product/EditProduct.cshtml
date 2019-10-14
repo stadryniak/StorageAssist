@@ -1,8 +1,9 @@
 ﻿@model Product
 
-    <div class="bg-light">
-        <p class="display-4">Edit product</p>
-    </div>
+
+<div class="bg-light">
+    <p class="display-4">Edit product</p>
+</div>
 <div class="bg-light">
     <div class="m-1">
         <form class="form-group" asp-controller="Product" asp-action="AddProductDb">
@@ -16,38 +17,22 @@
             <div class="form-group">
                 <div class="font-weight-bold">Product type:</div>
                 <div class="form-group m-2">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="Type" value="Meat" />
-                        <label class="form-check-label">Meat</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="Type" value="Vegetables" />
-                        <label class="form-check-label">Vegetables</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="Type" value="Fruits" />
-                        <label class="form-check-label">Fruits</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="Type" value="Dairy" />
-                        <label class="form-check-label">Dairy</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="Type" value="Candy" />
-                        <label class="form-check-label">Candy</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="Type" value="Other" />
-                        <label class="form-check-label">Other</label>
-                    </div>
+                    @foreach (var type in Enum.GetValues(typeof(ProductType)))
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Type" value="@type.ToString()" checked="@(type.ToString()==Model.Type.ToString())" />
+                            <label class="form-check-label">@type.ToString()</label>
+                        </div>
+                    }
                 </div>
             </div>
-            <!-- type selection end -->
             <!-- quantity type -->
             <div class="form-group">
                 <select class="form-control">
-                    <option name="quantityType" value="Count">Count</option>
-                    <option name="quantityType" value="Weight">Weight</option>
+                    @foreach (var type in Enum.GetValues(typeof(QuantityType)))
+                    {
+                        <option name="quantityType" value="@type.ToString()" selected="@(type.ToString() == Model.QuantityType.ToString())">@type.ToString()</option>
+                    }
                 </select>
             </div>
 
@@ -83,3 +68,22 @@
         </form>
     </div>
 </div>
+
+@functions {
+    private string IsDefault(string productType, Enum modelType, string inputType)
+    {
+        if (productType == modelType.ToString())
+        {
+            if (inputType == "checkbox")
+            {
+                return "checked";
+            }
+            if (inputType == "select")
+            {
+                return "selected";
+            }
+        }
+        return "";
+    }
+
+}
