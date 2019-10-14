@@ -104,9 +104,9 @@ namespace StorageAssist.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult EditProduct(Product product)
+        public IActionResult EditProduct(string productId)
         {
-            return View(product);
+            return View();
         }
 
         [Authorize]

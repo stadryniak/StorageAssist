@@ -1,3 +1,85 @@
-﻿
-<h1>Edit Product</h1>
+﻿@model Product
 
+    <div class="bg-light">
+        <p class="display-4">Edit product</p>
+    </div>
+<div class="bg-light">
+    <div class="m-1">
+        <form class="form-group" asp-controller="Product" asp-action="AddProductDb">
+            <!-- product name -->
+            <div class="form-group">
+                <label class="font-weight-bold">Product name:</label>
+                <input class="form-control" type="text" maxlength="50" name="productName" value="@Model.ProductName" />
+            </div>
+
+            <!-- type selection -->
+            <div class="form-group">
+                <div class="font-weight-bold">Product type:</div>
+                <div class="form-group m-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="Type" value="Meat" />
+                        <label class="form-check-label">Meat</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="Type" value="Vegetables" />
+                        <label class="form-check-label">Vegetables</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="Type" value="Fruits" />
+                        <label class="form-check-label">Fruits</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="Type" value="Dairy" />
+                        <label class="form-check-label">Dairy</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="Type" value="Candy" />
+                        <label class="form-check-label">Candy</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="Type" value="Other" />
+                        <label class="form-check-label">Other</label>
+                    </div>
+                </div>
+            </div>
+            <!-- type selection end -->
+            <!-- quantity type -->
+            <div class="form-group">
+                <select class="form-control">
+                    <option name="quantityType" value="Count">Count</option>
+                    <option name="quantityType" value="Weight">Weight</option>
+                </select>
+            </div>
+
+            <!-- quantity -->
+            <div class="form-group">
+                <label class="font-weight-bold">Quantity</label>
+                <input name="quantity" class="d-block" type="number" min="0" step="0.01" />
+            </div>
+
+            <!-- buy date -->
+            <div class="form-group">
+                <label class="font-weight-bold">Buy date</label>
+                <input name="buyDate" class="form-control" type="date" value="@DateTime.Today.Date.ToString("yyyy-MM-dd")">
+            </div>
+
+            <!-- expiration date -->
+            <div class="form-group">
+                <label class="font-weight-bold">Expiration date</label>
+                <input name="expirationDate" class="form-control" type="date" value="">
+            </div>
+
+            <!-- comment -->
+            <div class="form-group">
+                <label class="font-weight-bold">Comment</label>
+                <input name="comment" class="form-control" type="text" maxlength="255" />
+            </div>
+
+            <!-- submit button -->
+            <div class="m-2">
+                <button class="btn btn-success" type="submit">Add product</button>
+            </div>
+            <input name="storageId" type="hidden" value="@Model.StorageId" />
+        </form>
+    </div>
+</div>
