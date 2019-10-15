@@ -46,8 +46,10 @@ namespace StorageAssist.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> AddProductDb([Bind("StorageId, ProductName, Type, QuantityType, Quantity, BuyDate, ExpirationDate, Comment")] Product product)
+        public async Task<IActionResult> AddProductDb([Bind("StorageId, ProductName, Type, QuantityType, BuyDate, ExpirationDate, Comment")] Product product, string quantity)
         {
+            //add quantity to product
+            product.Quantity = double.Parse(quantity, System.Globalization.CultureInfo.InvariantCulture);
             // get requested storage from db
             var storageList = _appUserContext.Storages.Where(s => s.StorageId == product.StorageId)
                 .Include(s => s.Products)
@@ -68,6 +70,7 @@ namespace StorageAssist.Controllers
 
             return RedirectToAction("Index");
         }
+
 
         public async Task<IActionResult> DeleteProduct(string productId, string storageId)
         {

@@ -40,6 +40,7 @@ namespace StorageAssist
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddMvc();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
@@ -65,7 +66,6 @@ namespace StorageAssist
 
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
