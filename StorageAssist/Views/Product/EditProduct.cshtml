@@ -39,30 +39,30 @@
             <!-- quantity -->
             <div class="form-group">
                 <label class="font-weight-bold">Quantity</label>
-                <input name="quantity" class="d-block" type="number" min="0" step="0.01" />
+                <input name="quantity" class="d-block" type="number" min="0" step="0.01" value="@Model.Quantity.ToString(System.Globalization.CultureInfo.InvariantCulture)" />
             </div>
 
             <!-- buy date -->
             <div class="form-group">
                 <label class="font-weight-bold">Buy date</label>
-                <input name="buyDate" class="form-control" type="date" value="@DateTime.Today.Date.ToString("yyyy-MM-dd")">
+                <input name="buyDate" class="form-control" type="date" value="@Model.BuyDate.ToString("yyyy-MM-dd")">
             </div>
 
             <!-- expiration date -->
             <div class="form-group">
                 <label class="font-weight-bold">Expiration date</label>
-                <input name="expirationDate" class="form-control" type="date" value="">
+                <input name="expirationDate" class="form-control" type="date" value="@ExpirationDate(Model.ExpirationDate)">
             </div>
 
             <!-- comment -->
             <div class="form-group">
                 <label class="font-weight-bold">Comment</label>
-                <input name="comment" class="form-control" type="text" maxlength="255" />
+                <input name="comment" class="form-control" type="text" maxlength="255" value="@Model.Comment" />
             </div>
 
             <!-- submit button -->
             <div class="m-2">
-                <button class="btn btn-success" type="submit">Add product</button>
+                <button class="btn btn-success" type="submit" asp-controller="Product" asp-action="EditProductDb">Confirm edit</button>
             </div>
             <input name="storageId" type="hidden" value="@Model.StorageId" />
         </form>
@@ -86,4 +86,12 @@
         return "";
     }
 
+    public string ExpirationDate(DateTime? date)
+    {
+        if (date == null)
+        {
+            return "";
+        }
+        return ((DateTime)date).ToString("yyyy-MM-dd");
+    }
 }
