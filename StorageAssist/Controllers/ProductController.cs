@@ -13,8 +13,8 @@ namespace StorageAssist.Controllers
     {
         private readonly AppUserContext _appUserContext;
         // ReSharper disable once NotAccessedField.Local
-        private readonly UserManager<IdentityUser> _user;
-        public ProductController(AppUserContext appUserContext, UserManager<IdentityUser> user)
+        private readonly UserManager<ApplicationUser> _user;
+        public ProductController(AppUserContext appUserContext, UserManager<ApplicationUser> user)
         {
             _appUserContext = appUserContext;
             _user = user;

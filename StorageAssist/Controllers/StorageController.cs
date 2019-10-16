@@ -11,8 +11,8 @@ namespace StorageAssist.Controllers
     public class StorageController : Controller
     {
         private readonly AppUserContext _appUserContext;
-        private readonly UserManager<IdentityUser> _user;
-        public StorageController(AppUserContext appUserContext, UserManager<IdentityUser> user)
+        private readonly UserManager<ApplicationUser> _user;
+        public StorageController(AppUserContext appUserContext, UserManager<ApplicationUser> user)
         {
             _appUserContext = appUserContext;
             _user = user;
