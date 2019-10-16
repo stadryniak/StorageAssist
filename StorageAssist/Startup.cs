@@ -32,7 +32,9 @@ namespace StorageAssist
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>(options =>
-                    options.Password.RequireNonAlphanumeric = false)
+            {
+                options.Password.RequireNonAlphanumeric = false;
+            })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             //my user
