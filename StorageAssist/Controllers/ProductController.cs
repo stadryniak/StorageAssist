@@ -117,10 +117,13 @@ namespace StorageAssist.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult EditProductDb(Product product)
+        public async Task<IActionResult> EditProductDb([Bind("StorageId, ProductName, Type, QuantityType, BuyDate, ExpirationDate, Comment")] Product product, string quantity)
         {
-            throw new NotImplementedException();
-            //return RedirectToAction("Index");
+            product.Quantity = double.Parse(quantity, System.Globalization.CultureInfo.InvariantCulture);
+            _appUserContext.Products.Update(product);
+            await _appUserContext.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
     }
 }
