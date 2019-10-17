@@ -18,6 +18,10 @@ namespace StorageAssist.Controllers
             _user = user;
         }
         // GET
+        /// <summary>
+        /// Get users commons, storeges, products, notes from database and returns to view
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
         public IActionResult Index()
         {
@@ -107,9 +111,6 @@ namespace StorageAssist.Controllers
 
             return RedirectToAction("Index", "Storage");
         }
-
-
-
 
         [HttpPost]
         [Authorize]
@@ -211,6 +212,21 @@ namespace StorageAssist.Controllers
             await _appUserContext.SaveChangesAsync();
 
             return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> DeleteStorage(string storageId)
+        {
+            //get storage
+            var storageList = await _appUserContext.Storages.Where(s => s.OwnerId == _user.GetUserId(HttpContext.User)).ToListAsync();
+            if (storageList.Count != 1)
+            {
+                var error = new ErrorViewModel();
+                return RedirectToAction("Index", "Error", error);
+            }
+            var storage = storageList[0];
+
+            _appUserContext.Storages.Remove(storage);
+            await _appUserContext.SaveChangesAsync();
         }
     }
 }
