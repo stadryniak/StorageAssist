@@ -134,7 +134,12 @@
                                         @storage.StorageName
                                     </div>
                                 </div>
-                                <div class="col-sm-6 text-right">
+                                <div class="col-sm-2">
+                                    <form class="text-right" method="post">
+                                        <button class="btn btn-sm btn-danger" name="storageId" value="@storage.StorageId" asp-controller="Storage" asp-action="DeleteStorage">Delete storage</button>
+                                    </form>
+                                </div>
+                                <div class="col-sm-4 text-right">
                                     <form class="mr-4" method="post">
                                         <button class="btn btn-sm btn-secondary" name="storageId" value="@storage.StorageId" asp-controller="Product" asp-action="AddProduct">Add product</button>
                                     </form>
