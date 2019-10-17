@@ -47,10 +47,6 @@ namespace StorageAssist.Models
                 .HasMany(s => s.Products).WithOne(p => p.Storage)
                 .HasForeignKey(s => s.StorageId)
                 .OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<Storage>()
-                .HasMany(s => s.Products).WithOne(p => p.Storage)
-                .HasForeignKey(s => s.StorageId)
-                .OnDelete(DeleteBehavior.Cascade);
 
             //Product buyDate defaults to current day and time
             modelBuilder.Entity<Product>()

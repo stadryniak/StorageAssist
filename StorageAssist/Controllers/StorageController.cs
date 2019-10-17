@@ -227,6 +227,7 @@ namespace StorageAssist.Controllers
 
             _appUserContext.Storages.Remove(storage);
             await _appUserContext.SaveChangesAsync();
+
         }
     }
 }
