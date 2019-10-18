@@ -17,30 +17,13 @@
             <div class="form-group">
                 <div class="font-weight-bold">Product type:</div>
                 <div class="form-group m-2">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="Type" value="Meat"/>
-                        <label class="form-check-label">Meat</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="Type" value="Vegetables"/>
-                        <label class="form-check-label">Vegetables</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="Type" value="Fruits"/>
-                        <label class="form-check-label">Fruits</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="Type" value="Dairy"/>
-                        <label class="form-check-label">Dairy</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="Type" value="Candy"/>
-                        <label class="form-check-label">Candy</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="Type" value="Other"/>
-                        <label class="form-check-label">Other</label>
-                    </div>
+                    @foreach (var type in Enum.GetValues(typeof(ProductType)))
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Type" value="@type.ToString()" />
+                            <label class="form-check-label">@type.ToString()</label>
+                        </div>
+                    }
                 </div>
             </div>
             <!-- type selection end -->
@@ -85,3 +68,4 @@
         </form>
     </div>
 </div>
+
