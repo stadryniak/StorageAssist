@@ -37,7 +37,6 @@ namespace StorageAssist
             })
                 .AddEntityFrameworkStores<AppUserContext>();
 
-            services.AddMvc();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
