@@ -124,7 +124,7 @@
                     </button>
                 </div>
                 <div class="collapse bg-light" id="@RemoveLeadingDigits(userCommon.CommonResource.CommonResourceId)">
-
+                    <!--List storages and its items-->
                     @foreach (var storage in userCommon.CommonResource.Storages)
                     {
                         <div class="list-group-item bg-light">
@@ -147,39 +147,40 @@
                             </div>
 
                             <div class="collapse" id="@RemoveLeadingDigits(storage.StorageId)">
-                                <div class="table-responsive">
+                                <!--Product table-->
+                                <div class="table-responsive text-center">
                                     <table class="table table-sm table-striped table-bordered table-hover">
                                         <thead class="thead-dark">
-                                            <tr>
-                                                <th scope="col">Product</th>
-                                                <th scope="col">Bulk</th>
-                                                <th scope="col">Buy Date</th>
-                                                <th scope="col">Expire</th>
-                                                <th scope="col">Comment</th>
-                                                <th scope="col">Options</th>
-                                            </tr>
+                                        <tr>
+                                            <th class="align-middle" scope="col">Product</th>
+                                            <th class="align-middle" scope="col">Bulk</th>
+                                            <th class="align-middle" scope="col">Buy Date</th>
+                                            <th class="align-middle" scope="col">Expire</th>
+                                            <th class="align-middle" scope="col">Comment</th>
+                                            <th class="align-middle" scope="col">Options</th>
+                                        </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach (var product in storage.Products)
-                                            {
-                                                <tr>
-                                                    <th scope="row">@product.ProductName</th>
-                                                    <td>@product.Quantity</td>
-                                                    <td>@product.BuyDate.ToString("dd-MM-yyyy")</td>
-                                                    <td class="@ExpirationComes(product.ExpirationDate)">@product.ExpirationDate?.ToString("dd-MM-yyyy")</td>
-                                                    <td>@product.Comment</td>
-                                                    <td>
-                                                        <form class="d-inline" method="post">
-                                                            <button class="btn btn-sm btn-success" name="productId" value="@product.ProductId" asp-controller="Product" asp-action="EditProduct">Edit</button>
-                                                            <input type="hidden" name="storageId" value="@storage.StorageId" />
-                                                        </form>
-                                                        <form class="d-inline" method="post">
-                                                            <button class="btn btn-sm btn-danger" name="productId" value="@product.ProductId" asp-controller="Product" asp-action="DeleteProduct">Delete</button>
-                                                            <input type="hidden" name="storageId" value="@storage.StorageId" />
-                                                        </form>
-                                                    </td>
-                                                </tr>
-                                            }
+                                        @foreach (var product in storage.Products)
+                                        {
+                                            <tr>
+                                                <th class="align-middle" scope="row">@product.ProductName</th>
+                                                <td class="align-middle">@product.Quantity</td>
+                                                <td class="align-middle">@product.BuyDate.ToString("dd-MM-yyyy")</td>
+                                                <td class="align-middle @ExpirationComes(product.ExpirationDate)">@product.ExpirationDate?.ToString("dd-MM-yyyy")</td>
+                                                <td class="align-middle">@product.Comment</td>
+                                                <td class="align-middle">
+                                                    <form class="d-inline" method="post">
+                                                        <button class="btn btn-sm btn-success" name="productId" value="@product.ProductId" asp-controller="Product" asp-action="EditProduct">Edit</button>
+                                                        <input type="hidden" name="storageId" value="@storage.StorageId"/>
+                                                    </form>
+                                                    <form class="d-inline" method="post">
+                                                        <button class="btn btn-sm btn-danger" name="productId" value="@product.ProductId" asp-controller="Product" asp-action="DeleteProduct">Delete</button>
+                                                        <input type="hidden" name="storageId" value="@storage.StorageId"/>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        }
                                         </tbody>
                                     </table>
                                 </div>
