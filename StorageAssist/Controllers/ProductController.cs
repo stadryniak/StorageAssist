@@ -35,8 +35,6 @@ namespace StorageAssist.Controllers
         [Authorize]
         public IActionResult AddProduct(string storageId)
         {
-            System.Diagnostics.Debug.WriteLine("Debug info starts:");
-            System.Diagnostics.Debug.WriteLine(storageId);
             var product = new Product()
             {
                 StorageId = storageId
@@ -57,7 +55,10 @@ namespace StorageAssist.Controllers
             // check if only one storage is in list and if it belongs to current user. If not return error
             if (storageList.Count != 1)
             {
-                var error = new ErrorViewModel();
+                var error = new ErrorViewModel()
+                {
+                    ErrorMessage = "Error 1"
+                };
                 return RedirectToAction("Index", "Error", error);
             }
             var storage = storageList[0];
@@ -81,7 +82,10 @@ namespace StorageAssist.Controllers
             // check if only one storage is in list and if it belongs to current user. If not return error
             if (storageList.Count != 1)
             {
-                var error = new ErrorViewModel();
+                var error = new ErrorViewModel()
+                {
+                    ErrorMessage = "Error 2"
+                };
                 return RedirectToAction("Index", "Error", error);
             }
             var storage = storageList[0];
@@ -90,7 +94,10 @@ namespace StorageAssist.Controllers
             var productList = storage.Products.Where(p => p.ProductId == productId).ToList();
             if (productList.Count != 1)
             {
-                var error = new ErrorViewModel();
+                var error = new ErrorViewModel()
+                {
+                    ErrorMessage = "Error 3"
+                };
                 return RedirectToAction("Index", "Error", error);
             }
             var product = productList[0];

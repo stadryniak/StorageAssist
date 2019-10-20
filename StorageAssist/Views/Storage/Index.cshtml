@@ -165,7 +165,7 @@
                                         {
                                             <tr>
                                                 <th class="align-middle" scope="row">@product.ProductName</th>
-                                                <td class="align-middle">@product.Quantity</td>
+                                                <td class="align-middle">@product.Quantity.ToString(System.Globalization.CultureInfo.InvariantCulture)</td>
                                                 <td class="align-middle">@product.BuyDate.ToString("dd-MM-yyyy")</td>
                                                 <td class="align-middle @ExpirationComes(product.ExpirationDate)">@product.ExpirationDate?.ToString("dd-MM-yyyy")</td>
                                                 <td class="align-middle">@product.Comment</td>

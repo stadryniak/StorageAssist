@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.EntityFrameworkCore;
 using StorageAssist.Models;
 
@@ -36,7 +37,11 @@ namespace StorageAssist.Controllers
                 .ToList();
             if (userList.Count != 1 || userList[0] == null)
             {
-                return View("Error");
+                var error = new ErrorViewModel()
+                {
+                    ErrorMessage = "Error 10: unable to get user's data"
+                };
+                return RedirectToAction("Index", "Error", error);
             }
 
             var user = userList[0];
@@ -51,7 +56,10 @@ namespace StorageAssist.Controllers
             // Probably overcomplicated, split into functions at some point 
             if (string.IsNullOrEmpty(storage.StorageName) || (string.IsNullOrEmpty(commonResourceId) && string.IsNullOrEmpty(commonResourceName)))
             {
-                var error = new ErrorViewModel();
+                var error = new ErrorViewModel()
+                {
+                    ErrorMessage = "Error 11: Storage name empty or common resource not set/empty."
+                };
                 return RedirectToAction("Index", "Error", error);
             }
             //get user and she's/he's CommonResources from database
@@ -61,7 +69,10 @@ namespace StorageAssist.Controllers
             //validate if user is logged in and only one user have given Id
             if (userList.Count != 1)
             {
-                var error = new ErrorViewModel();
+                var error = new ErrorViewModel()
+                {
+                    ErrorMessage = "Error 12"
+                };
                 return RedirectToAction("Index", "Error", error);
             }
             var user = userList[0];
@@ -77,7 +88,10 @@ namespace StorageAssist.Controllers
                     .ToList();
                 if (commonList.Count != 1)
                 {
-                    var error = new ErrorViewModel();
+                    var error = new ErrorViewModel()
+                    {
+                        ErrorMessage = "Error 13"
+                    };
                     return RedirectToAction("Index", "Error", error);
                 }
 
@@ -123,7 +137,10 @@ namespace StorageAssist.Controllers
             //validate if user is logged in and only one user have given Id
             if (userList.Count != 1)
             {
-                var error = new ErrorViewModel();
+                var error = new ErrorViewModel()
+                {
+                    ErrorMessage = "Error 14"
+                };
                 return RedirectToAction("Index", "Error", error);
             }
             var user = userList[0];
@@ -166,7 +183,10 @@ namespace StorageAssist.Controllers
             //validate if user is logged in and only one user have given Id
             if (userList.Count != 1)
             {
-                var error = new ErrorViewModel();
+                var error = new ErrorViewModel()
+                {
+                    ErrorMessage = "Error 15"
+                };
                 return RedirectToAction("Index", "Error", error);
             }
             var user = userList[0];
@@ -180,7 +200,10 @@ namespace StorageAssist.Controllers
                 .ToList();
             if (commonList.Count != 1)
             {
-                var error = new ErrorViewModel();
+                var error = new ErrorViewModel()
+                {
+                    ErrorMessage = "Error 16"
+                };
                 return RedirectToAction("Index", "Error", error);
             }
             var common = commonList[0];
@@ -220,7 +243,10 @@ namespace StorageAssist.Controllers
             var storageList = await _appUserContext.Storages.Where(s => s.OwnerId == _user.GetUserId(HttpContext.User)).ToListAsync();
             if (storageList.Count != 1)
             {
-                var error = new ErrorViewModel();
+                var error = new ErrorViewModel()
+                {
+                    ErrorMessage = "Error 17"
+                };
                 return RedirectToAction("Index", "Error", error);
             }
             var storage = storageList[0];
