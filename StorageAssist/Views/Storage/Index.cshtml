@@ -101,11 +101,6 @@
                     <div class="h3" data-toggle="collapse" data-target="#@RemoveLeadingDigits(RemoveLeadingDigits(userCommon.CommonResourceId).Substring(1))">
                         @userCommon.CommonResource.CommonResourceName
                     </div>
-                    <div data-toggle="collapse" data-target="#@StoragesIdString(userCommon)">
-                        <p class="m-0">
-                            Show all
-                        </p>
-                    </div>
                     <div id="@RemoveLeadingDigits(RemoveLeadingDigits(userCommon.CommonResourceId).Substring(1))" class="collapse">
                         <div class="row">
                             <div class="text-muted col-8">
@@ -117,40 +112,40 @@
                             </form>
                         </div>
                     </div>
+                    <div data-toggle="collapse" data-target="#@StoragesIdString(userCommon)">
+                        <p class="m-0">
+                            Show all
+                        </p>
+                    </div>
                 </div>
-                <div>
-                    <button class="btn btn-info btn-sm m-1" type="button" data-toggle="collapse" data-target="#@RemoveLeadingDigits(userCommon.CommonResource.CommonResourceId)">
-                        Storage list
-                    </button>
-                </div>
-                <div class="collapse bg-light" id="@RemoveLeadingDigits(userCommon.CommonResource.CommonResourceId)">
-                    <!--List storages and its items-->
-                    @foreach (var storage in userCommon.CommonResource.Storages)
-                    {
-                        <div class="list-group-item bg-light">
-                            <div class="row mb-1">
-                                <div class="col-sm-6">
-                                    <div class="h4 text-center" data-toggle="collapse" data-target="#@RemoveLeadingDigits(storage.StorageId)">
-                                        @storage.StorageName
-                                    </div>
-                                </div>
-                                <div class="col-sm-2">
-                                    <form class="text-right" method="post">
-                                        <button class="btn btn-sm btn-danger" name="storageId" value="@storage.StorageId" asp-controller="Storage" asp-action="DeleteStorage">Delete storage</button>
-                                    </form>
-                                </div>
-                                <div class="col-sm-4 text-right">
-                                    <form class="mr-4" method="post">
-                                        <button class="btn btn-sm btn-secondary" name="storageId" value="@storage.StorageId" asp-controller="Product" asp-action="AddProduct">Add product</button>
-                                    </form>
+
+                <!--List storages and its items-->
+                @foreach (var storage in userCommon.CommonResource.Storages)
+                {
+                    <div class="list-group-item bg-light">
+                        <div class="row mb-1">
+                            <div class="col-sm-6">
+                                <div class="h4 text-center" data-toggle="collapse" data-target="#@RemoveLeadingDigits(storage.StorageId)">
+                                    @storage.StorageName
                                 </div>
                             </div>
+                            <div class="col-sm-2">
+                                <form class="text-right" method="post">
+                                    <button class="btn btn-sm btn-danger" name="storageId" value="@storage.StorageId" asp-controller="Storage" asp-action="DeleteStorage">Delete storage</button>
+                                </form>
+                            </div>
+                            <div class="col-sm-4 text-right">
+                                <form class="mr-4" method="post">
+                                    <button class="btn btn-sm btn-secondary" name="storageId" value="@storage.StorageId" asp-controller="Product" asp-action="AddProduct">Add product</button>
+                                </form>
+                            </div>
+                        </div>
 
-                            <div class="collapse" id="@RemoveLeadingDigits(storage.StorageId)">
-                                <!--Product table-->
-                                <div class="table-responsive text-center">
-                                    <table class="table table-sm table-striped table-bordered table-hover">
-                                        <thead class="thead-dark">
+                        <div class="collapse" id="@RemoveLeadingDigits(storage.StorageId)">
+                            <!--Product table-->
+                            <div class="table-responsive text-center">
+                                <table class="table table-sm table-striped table-bordered table-hover">
+                                    <thead class="thead-dark">
                                         <tr>
                                             <th class="align-middle" scope="col">Product</th>
                                             <th class="align-middle" scope="col">Bulk</th>
@@ -159,8 +154,8 @@
                                             <th class="align-middle" scope="col">Comment</th>
                                             <th class="align-middle" scope="col">Options</th>
                                         </tr>
-                                        </thead>
-                                        <tbody>
+                                    </thead>
+                                    <tbody>
                                         @foreach (var product in storage.Products)
                                         {
                                             <tr>
@@ -172,22 +167,21 @@
                                                 <td class="align-middle">
                                                     <form class="d-inline" method="post">
                                                         <button class="btn btn-sm btn-success" name="productId" value="@product.ProductId" asp-controller="Product" asp-action="EditProduct">Edit</button>
-                                                        <input type="hidden" name="storageId" value="@storage.StorageId"/>
+                                                        <input type="hidden" name="storageId" value="@storage.StorageId" />
                                                     </form>
                                                     <form class="d-inline" method="post">
                                                         <button class="btn btn-sm btn-danger" name="productId" value="@product.ProductId" asp-controller="Product" asp-action="DeleteProduct">Delete</button>
-                                                        <input type="hidden" name="storageId" value="@storage.StorageId"/>
+                                                        <input type="hidden" name="storageId" value="@storage.StorageId" />
                                                     </form>
                                                 </td>
                                             </tr>
                                         }
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                    }
-                </div>
+                    </div>
+                }
             </div>
         }
     </div>
@@ -225,7 +219,7 @@
         {
             idString += RemoveLeadingDigits(storage.StorageId) + ",#";
         }
-        idString += RemoveLeadingDigits(userCommon.CommonResource.CommonResourceId);
+        idString = idString.Substring(0, idString.Length - 3);
         return idString;
     }
 
