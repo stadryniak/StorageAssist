@@ -106,9 +106,11 @@
                             <div class="text-muted col-8">
                                 CommonID: @userCommon.CommonResourceId
                             </div>
-                            <form class="form-group col-4" asp-controller="Storage" asp-action="DeleteCommonResources">
+                            <form class="form-group col-4" asp-controller="Delete" asp-action="Index">
                                 <button class="btn btn-sm btn-danger">Delete common resources</button>
-                                <input type="hidden" name="commonResourceId" value="@userCommon.CommonResource.CommonResourceId" />
+                                <input type="hidden" name="id" value="@userCommon.CommonResource.CommonResourceId" />
+                                <input type="hidden" name="typePost" value="CommonResource"/>
+                                <input type="hidden" name="ownerId" value="@userCommon.CommonResource.OwnerId"/>
                             </form>
                         </div>
                     </div>
