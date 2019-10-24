@@ -22,7 +22,7 @@ namespace StorageAssist.Controllers
             _user = user;
         }
         //gets id, type and owner
-        public IActionResult Index(string id, string typePost ,string ownerId )
+        public async Task<IActionResult> Index(string id, string typePost, string ownerId)
         {
             var type = "StorageAssist.Models." + typePost;
             Type t = Type.GetType(type);
@@ -38,12 +38,30 @@ namespace StorageAssist.Controllers
             switch (toDelete)
             {
                 case CommonResource common:
-                    toDelete = _appUserContext.CommonResources
+                    toDelete = await _appUserContext.CommonResources
                         .Where(c => c.CommonResourceId == id)
                         .Include(c => c.Storages)
                             .ThenInclude(s => s.Products)
                         .Include(c => c.Notes)
-                        .FirstOrDefault();
+                        .Include(c => c.UserCommonResource)
+                        .FirstOrDefaultAsync();
+                    var usersCommon = ((CommonResource) toDelete).UserCommonResource.Where(uc => uc.UserId == _user.GetUserId(User)).ToList();
+                    break;
+                case Storage storage:
+                    toDelete = await _appUserContext.Storages
+                        .Where(s => s.StorageId == id)
+                        .Include(s => s.Products)
+                        .FirstOrDefaultAsync();
+                    break;
+                case Product product:
+                    toDelete = await _appUserContext.Products
+                        .Where(p => p.ProductId == id)
+                        .FirstOrDefaultAsync();
+                    break;
+                case Note note:
+                    toDelete = await _appUserContext.Notes
+                        .Where(n => n.NoteId == id)
+                        .FirstOrDefaultAsync();
                     break;
                 default: break;
             }
