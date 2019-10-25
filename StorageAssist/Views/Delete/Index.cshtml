@@ -5,5 +5,9 @@
 }
 
 <h1>Confirm deletion?</h1>
-<div class="btn btn-danger btn-lg">Confirm</div>
+<form asp-controller="Delete" asp-action="DeleteTask" method="post">
+    <button class="btn btn-danger btn-lg" type="submit">Confirm</button>
+    <input type="hidden" name="id" value="@ViewBag.id" />
+    <input type="hidden" name="typePost" value="@ViewBag.typePost" />
+</form>
 

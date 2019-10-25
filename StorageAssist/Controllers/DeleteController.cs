@@ -22,7 +22,14 @@ namespace StorageAssist.Controllers
             _user = user;
         }
         //gets id, type and owner
-        public async Task<IActionResult> Index(string id, string typePost, string ownerId)
+        public IActionResult Index(string id, string typePost)
+        {
+            ViewBag.id = id;
+            ViewBag.typePost = typePost;
+            return View();
+        }
+
+        public async Task<IActionResult> DeleteTask(string id, string typePost)
         {
             var type = "StorageAssist.Models." + typePost;
             Type t = Type.GetType(type);
@@ -34,6 +41,7 @@ namespace StorageAssist.Controllers
                 };
                 return RedirectToAction("Index", "Error", error);
             }
+
             var toDelete = Activator.CreateInstance(t);
             switch (toDelete)
             {
@@ -41,11 +49,10 @@ namespace StorageAssist.Controllers
                     toDelete = await _appUserContext.CommonResources
                         .Where(c => c.CommonResourceId == id)
                         .Include(c => c.Storages)
-                            .ThenInclude(s => s.Products)
+                        .ThenInclude(s => s.Products)
                         .Include(c => c.Notes)
                         .Include(c => c.UserCommonResource)
                         .FirstOrDefaultAsync();
-                    var usersCommon = ((CommonResource) toDelete).UserCommonResource.Where(uc => uc.UserId == _user.GetUserId(User)).ToList();
                     break;
                 case Storage storage:
                     toDelete = await _appUserContext.Storages
@@ -63,22 +70,65 @@ namespace StorageAssist.Controllers
                         .Where(n => n.NoteId == id)
                         .FirstOrDefaultAsync();
                     break;
-                default: break;
+                default:
+                    var error = new ErrorViewModel()
+                    {
+                        ErrorMessage = "Error 60"
+                    };
+                    return RedirectToAction("Index", "Error", error);
             }
-            Delete(toDelete);
-            return View();
+            await Delete(toDelete);
+            return RedirectToAction("Index", "Storage");
         }
 
-
         /// <summary>
-        /// This generic class handles deletion of every object in database.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="toDeletion">Object to delete from database</param>
-        private void Delete<T>(T toDeletion)
+/// This generic class handles deletion of every object in database.
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <param name="toDelete">Object to delete from database</param>
+private async Task Delete<T>(T toDelete)
         {
-            System.Diagnostics.Debug.WriteLine(toDeletion);
-            _user.GetUserId(User);
+            switch (toDelete)
+            {
+                case CommonResource common:
+                    if (common.OwnerId == _user.GetUserId(User))
+                    {
+                        
+                        //remove dependent resources
+                        _appUserContext.Notes.RemoveRange(common.Notes);
+                        _appUserContext.UserCommonResources.RemoveRange(common.UserCommonResource);
+                        foreach (var storage in common.Storages)
+                        {
+                            _appUserContext.Products.RemoveRange(storage.Products);
+                        }
+
+                        _appUserContext.Storages.RemoveRange(common.Storages);
+
+                        _appUserContext.CommonResources.Remove(common);
+                        await _appUserContext.SaveChangesAsync();
+                        break;
+                    }
+                    //remove common from user list
+                    var usersCommon = common.UserCommonResource.Where(uc => uc.UserId == _user.GetUserId(User)).ToList();
+                    foreach (var userCommonResource in usersCommon)
+                    {
+                        _appUserContext.UserCommonResources.Remove(userCommonResource);
+                    }
+                    await _appUserContext.SaveChangesAsync();
+                    break;
+                case Storage storage:
+                    _appUserContext.Products.RemoveRange(storage.Products);
+                    _appUserContext.Storages.Remove(storage);
+                    await _appUserContext.SaveChangesAsync();
+                    break;
+                case Product product:
+                    _appUserContext.Products.Remove(product);
+                    await _appUserContext.SaveChangesAsync();
+                    break;
+                case Note note:
+                    _appUserContext.Notes.Remove(note);
+                    break;
+            }
         }
     }
 }

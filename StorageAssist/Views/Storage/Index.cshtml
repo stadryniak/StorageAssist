@@ -109,8 +109,7 @@
                             <form class="form-group col-4" asp-controller="Delete" asp-action="Index">
                                 <button class="btn btn-sm btn-danger">Delete common resources</button>
                                 <input type="hidden" name="id" value="@userCommon.CommonResource.CommonResourceId" />
-                                <input type="hidden" name="typePost" value="CommonResource"/>
-                                <input type="hidden" name="ownerId" value="@userCommon.CommonResource.OwnerId"/>
+                                <input type="hidden" name="typePost" value="CommonResource" />
                             </form>
                         </div>
                     </div>
@@ -133,7 +132,8 @@
                             </div>
                             <div class="col-sm-2">
                                 <form class="text-right" method="post">
-                                    <button class="btn btn-sm btn-danger" name="storageId" value="@storage.StorageId" asp-controller="Storage" asp-action="DeleteStorage">Delete storage</button>
+                                    <input type="hidden" name="typePost" value="Storage" />
+                                    <button class="btn btn-sm btn-danger" name="Id" value="@storage.StorageId" asp-controller="Delete" asp-action="Index">Delete storage</button>
                                 </form>
                             </div>
                             <div class="col-sm-4 text-right">
@@ -168,12 +168,13 @@
                                                 <td class="align-middle">@product.Comment</td>
                                                 <td class="align-middle">
                                                     <form class="d-inline" method="post">
-                                                        <button class="btn btn-sm btn-success" name="productId" value="@product.ProductId" asp-controller="Product" asp-action="EditProduct">Edit</button>
+                                                        <button class="btn btn-sm btn-success" name="id" value="@product.ProductId" asp-controller="Product" asp-action="EditProduct">Edit</button>
                                                         <input type="hidden" name="storageId" value="@storage.StorageId" />
                                                     </form>
                                                     <form class="d-inline" method="post">
-                                                        <button class="btn btn-sm btn-danger" name="productId" value="@product.ProductId" asp-controller="Product" asp-action="DeleteProduct">Delete</button>
+                                                        <button class="btn btn-sm btn-danger" name="id" value="@product.ProductId" asp-controller="Delete" asp-action="Index">Delete</button>
                                                         <input type="hidden" name="storageId" value="@storage.StorageId" />
+                                                        <input type="hidden" name="typePost" value="Product" />
                                                     </form>
                                                 </td>
                                             </tr>
@@ -217,11 +218,14 @@
     private string StoragesIdString(UserCommonResource userCommon)
     {
         string idString = "";
-        foreach (var storage in userCommon.CommonResource.Storages)
+        if (userCommon.CommonResource.Storages.Count != 0)
         {
-            idString += RemoveLeadingDigits(storage.StorageId) + ",#";
+            foreach (var storage in userCommon.CommonResource.Storages)
+            {
+                idString += RemoveLeadingDigits(storage.StorageId) + ",#";
+            }
+            idString = idString.Substring(0, idString.Length - 2);
         }
-        idString = idString.Substring(0, idString.Length - 3);
         return idString;
     }
 
