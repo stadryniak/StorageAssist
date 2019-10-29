@@ -4,10 +4,24 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Confirm deletion?</h1>
-<form asp-controller="Delete" asp-action="DeleteTask" method="post">
-    <button class="btn btn-danger btn-lg" type="submit">Confirm</button>
-    <input type="hidden" name="id" value="@ViewBag.id" />
-    <input type="hidden" name="typePost" value="@ViewBag.typePost" />
-</form>
+<div class="bg-light">
+    <div class="p-2">
+        <h1>Confirm deletion?</h1>
+        <h4>Item name: @ViewBag.name</h4>
+        <h6>Item type: @ViewBag.typePost</h6>
+        <div class="bg-danger text-warning text-center border rounded p-2 m-1">WARNING! This action cannot be undone</div>
+        @if (@ViewBag.typePost == "CommonResource" && @ViewBag.isOwner)
+        {
+            <div class="bg-info text-center border rounded p-2 m-1">Info: owner deletes common resources for everyone. Irrecoverably.</div>
+        }
+        <form asp-controller="Delete" asp-action="DeleteTask" method="post" class="d-inline">
+            <button class="btn btn-danger btn-lg" type="submit">Confirm</button>
+            <input type="hidden" name="id" value="@ViewBag.id" />
+            <input type="hidden" name="typePost" value="@ViewBag.typePost" />
+        </form>
+        <form asp-controller="Storage" asp-action="Index" class="d-inline">
+            <button class="btn btn-info">Back</button>
+        </form>
+    </div>
+</div>
 

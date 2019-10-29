@@ -22,10 +22,12 @@ namespace StorageAssist.Controllers
             _user = user;
         }
         //gets id, type and owner
-        public IActionResult Index(string id, string typePost)
+        public IActionResult Index(string id, string typePost, string name, string ownerId)
         {
             ViewBag.id = id;
             ViewBag.typePost = typePost;
+            ViewBag.name = name;
+            ViewBag.isOwner = ownerId == _user.GetUserId(User);
             return View();
         }
 

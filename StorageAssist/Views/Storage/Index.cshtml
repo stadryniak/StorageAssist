@@ -108,7 +108,9 @@
                             </div>
                             <form class="form-group col-4" asp-controller="Delete" asp-action="Index">
                                 <button class="btn btn-sm btn-danger">Delete common resources</button>
-                                <input type="hidden" name="id" value="@userCommon.CommonResource.CommonResourceId" />
+                                <input type="hidden" name="id" value="@userCommon.CommonResourceId" />
+                                <input type="hidden" name="ownerId" value="@userCommon.CommonResource.OwnerId" />
+                                <input type="hidden" name="name" value="@userCommon.CommonResource.CommonResourceName" />
                                 <input type="hidden" name="typePost" value="CommonResource" />
                             </form>
                         </div>
@@ -132,8 +134,9 @@
                             </div>
                             <div class="col-sm-2">
                                 <form class="text-right" method="post">
-                                    <input type="hidden" name="typePost" value="Storage" />
                                     <button class="btn btn-sm btn-danger" name="Id" value="@storage.StorageId" asp-controller="Delete" asp-action="Index">Delete storage</button>
+                                    <input type="hidden" name="name" value="@storage.StorageName" />
+                                    <input type="hidden" name="typePost" value="Storage" />
                                 </form>
                             </div>
                             <div class="col-sm-4 text-right">
@@ -174,6 +177,7 @@
                                                     <form class="d-inline" method="post">
                                                         <button class="btn btn-sm btn-danger" name="id" value="@product.ProductId" asp-controller="Delete" asp-action="Index">Delete</button>
                                                         <input type="hidden" name="storageId" value="@storage.StorageId" />
+                                                        <input type="hidden" name="name" value="@product.ProductName" />
                                                         <input type="hidden" name="typePost" value="Product" />
                                                     </form>
                                                 </td>
