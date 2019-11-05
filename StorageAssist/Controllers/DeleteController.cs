@@ -84,18 +84,18 @@ namespace StorageAssist.Controllers
         }
 
         /// <summary>
-/// This generic class handles deletion of every object in database.
-/// </summary>
-/// <typeparam name="T"></typeparam>
-/// <param name="toDelete">Object to delete from database</param>
-private async Task Delete<T>(T toDelete)
+        /// This generic class handles deletion of every object in database.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="toDelete">Object to delete from database</param>
+        private async Task Delete<T>(T toDelete)
         {
             switch (toDelete)
             {
                 case CommonResource common:
                     if (common.OwnerId == _user.GetUserId(User))
                     {
-                        
+
                         //remove dependent resources
                         _appUserContext.Notes.RemoveRange(common.Notes);
                         _appUserContext.UserCommonResources.RemoveRange(common.UserCommonResource);
@@ -107,7 +107,6 @@ private async Task Delete<T>(T toDelete)
                         _appUserContext.Storages.RemoveRange(common.Storages);
 
                         _appUserContext.CommonResources.Remove(common);
-                        await _appUserContext.SaveChangesAsync();
                         break;
                     }
                     //remove common from user list
@@ -116,21 +115,19 @@ private async Task Delete<T>(T toDelete)
                     {
                         _appUserContext.UserCommonResources.Remove(userCommonResource);
                     }
-                    await _appUserContext.SaveChangesAsync();
                     break;
                 case Storage storage:
                     _appUserContext.Products.RemoveRange(storage.Products);
                     _appUserContext.Storages.Remove(storage);
-                    await _appUserContext.SaveChangesAsync();
                     break;
                 case Product product:
                     _appUserContext.Products.Remove(product);
-                    await _appUserContext.SaveChangesAsync();
                     break;
                 case Note note:
                     _appUserContext.Notes.Remove(note);
                     break;
             }
+            await _appUserContext.SaveChangesAsync();
         }
     }
 }

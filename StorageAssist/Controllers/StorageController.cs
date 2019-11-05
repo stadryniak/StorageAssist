@@ -24,9 +24,9 @@ namespace StorageAssist.Controllers
         /// </summary>
         /// <returns></returns>
         [Authorize]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var userList = _appUserContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(HttpContext.User))
+            var user = await _appUserContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(HttpContext.User))
                 .Include(u => u.UserCommonResource)
                     .ThenInclude(uc => uc.CommonResource)
                         .ThenInclude(c => c.Storages)
@@ -34,8 +34,8 @@ namespace StorageAssist.Controllers
                 .Include(u => u.UserCommonResource)
                     .ThenInclude(uc => uc.CommonResource)
                         .ThenInclude(c => c.Notes)
-                .ToList();
-            if (userList.Count != 1 || userList[0] == null)
+                .FirstOrDefaultAsync();
+            if (user == null)
             {
                 var error = new ErrorViewModel()
                 {
@@ -43,8 +43,6 @@ namespace StorageAssist.Controllers
                 };
                 return RedirectToAction("Index", "Error", error);
             }
-
-            var user = userList[0];
             return View(user);
         }
 
@@ -63,19 +61,17 @@ namespace StorageAssist.Controllers
                 return RedirectToAction("Index", "Error", error);
             }
             //get user and she's/he's CommonResources from database
-            var userList = _appUserContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(HttpContext.User))
+            var user = await _appUserContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(HttpContext.User))
                     .Include(u => u.UserCommonResource)
-                    .ToList();
-            //validate if user is logged in and only one user have given Id
-            if (userList.Count != 1)
+                    .FirstOrDefaultAsync();
+            if (user == null)
             {
                 var error = new ErrorViewModel()
                 {
-                    ErrorMessage = "Error 12"
+                    ErrorMessage = "Error 10: unable to get user's data"
                 };
                 return RedirectToAction("Index", "Error", error);
             }
-            var user = userList[0];
 
             storage.OwnerId = user.Id;
 
@@ -83,10 +79,10 @@ namespace StorageAssist.Controllers
             //if commonResourceId specified, get it from database, add storage
             if (!string.IsNullOrEmpty(commonResourceId))
             {
-                var commonList = _appUserContext.CommonResources.Where(c => c.CommonResourceId == commonResourceId)
+                common = await _appUserContext.CommonResources.Where(c => c.CommonResourceId == commonResourceId)
                     .Include(c => c.Storages)
-                    .ToList();
-                if (commonList.Count != 1)
+                    .FirstOrDefaultAsync();
+                if (common== null)
                 {
                     var error = new ErrorViewModel()
                     {
@@ -94,8 +90,6 @@ namespace StorageAssist.Controllers
                     };
                     return RedirectToAction("Index", "Error", error);
                 }
-
-                common = commonList[0];
                 common.Storages.Add(storage);
                 _appUserContext.CommonResources.Update(common);
                 _appUserContext.SaveChanges();
@@ -131,28 +125,25 @@ namespace StorageAssist.Controllers
         public async Task<IActionResult> AddExistingCommon(string commonResourceId)
         {
             //get user and she's/he's CommonResources from database
-            var userList = _appUserContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(HttpContext.User))
+            var user = await _appUserContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(HttpContext.User))
                 .Include(u => u.UserCommonResource)
-                .ToList();
-            //validate if user is logged in and only one user have given Id
-            if (userList.Count != 1)
+                .FirstOrDefaultAsync();
+            if (user == null)
             {
                 var error = new ErrorViewModel()
                 {
-                    ErrorMessage = "Error 14"
+                    ErrorMessage = "Error 10: unable to get user's data"
                 };
                 return RedirectToAction("Index", "Error", error);
             }
-            var user = userList[0];
 
             //get requested commonResources
-            var commonList = _appUserContext.CommonResources.Where(c => c.CommonResourceId == commonResourceId).ToList();
-            if (commonList.Count != 1)
+            var common = await _appUserContext.CommonResources.Where(c => c.CommonResourceId == commonResourceId).FirstOrDefaultAsync();
+            if (common== null)
             {
                 var error = new ErrorViewModel();
                 return RedirectToAction("Index", "Error", error);
             }
-            var common = commonList[0];
 
             //add commonResource to user
             var join = new UserCommonResource

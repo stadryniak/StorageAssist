@@ -49,11 +49,11 @@ namespace StorageAssist.Controllers
             //add quantity to product
             product.Quantity = double.Parse(quantity, System.Globalization.CultureInfo.InvariantCulture);
             // get requested storage from db
-            var storageList = _appUserContext.Storages.Where(s => s.StorageId == product.StorageId)
+            var storage = await _appUserContext.Storages.Where(s => s.StorageId == product.StorageId)
                 .Include(s => s.Products)
-                .ToList();
+                .FirstOrDefaultAsync();
             // check if only one storage is in list and if it belongs to current user. If not return error
-            if (storageList.Count != 1)
+            if (storage == null)
             {
                 var error = new ErrorViewModel()
                 {
@@ -61,7 +61,6 @@ namespace StorageAssist.Controllers
                 };
                 return RedirectToAction("Index", "Error", error);
             }
-            var storage = storageList[0];
             storage.Products.Add(product);
             product.Storage = storage;
 
@@ -74,10 +73,18 @@ namespace StorageAssist.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> EditProduct(string productId)
+        public async Task<IActionResult> EditProduct(string Id)
         {
             //get product from db
-            var product = await _appUserContext.Products.FirstOrDefaultAsync(p => p.ProductId == productId);
+            var product = await _appUserContext.Products.FirstOrDefaultAsync(p => p.ProductId == Id);
+            if (product == null)
+            {
+                var error = new ErrorViewModel()
+                {
+                    ErrorMessage = "Invalid product"
+                };
+                return RedirectToAction("Index", "Error", error);
+            }
 
             return View(product);
         }
