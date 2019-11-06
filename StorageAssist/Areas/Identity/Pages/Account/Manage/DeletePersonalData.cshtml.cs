@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using StorageAssist.Models;
 
@@ -14,15 +16,18 @@ namespace StorageAssist.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<DeletePersonalDataModel> _logger;
+        private readonly AppUserContext _appUserContext;
 
         public DeletePersonalDataModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ILogger<DeletePersonalDataModel> logger)
+            ILogger<DeletePersonalDataModel> logger,
+            AppUserContext appUserContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _appUserContext = appUserContext;
         }
 
         [BindProperty]
@@ -66,7 +71,7 @@ namespace StorageAssist.Areas.Identity.Pages.Account.Manage
                     return Page();
                 }
             }
-            //TODO: delete user resources, DI required
+            await DeleteDbDependencies(user);
             var result = await _userManager.DeleteAsync(user);
             var userId = await _userManager.GetUserIdAsync(user);
             if (!result.Succeeded)
@@ -79,6 +84,30 @@ namespace StorageAssist.Areas.Identity.Pages.Account.Manage
             _logger.LogInformation("User with ID '{UserId}' deleted themselves.", userId);
 
             return Redirect("~/");
+        }
+
+        private async Task DeleteDbDependencies(ApplicationUser user)
+        {
+            var commonList = await _appUserContext.CommonResources
+                .Where(c => c.OwnerId == user.Id)
+                .Include(c => c.Storages)
+                    .ThenInclude(s => s.Products)
+                .Include(c => c.Notes)
+                .ToListAsync();
+
+
+            //deletes users data from db, only if she's/he's owner
+            foreach (var commonResource in commonList)
+            {
+                foreach (var storage in commonResource.Storages)
+                {
+                    _appUserContext.Products.RemoveRange(storage.Products);
+                }
+                _appUserContext.Storages.RemoveRange(commonResource.Storages);
+                _appUserContext.RemoveRange(commonResource.Notes);
+            }
+            _appUserContext.RemoveRange(commonList);
+            await _appUserContext.SaveChangesAsync();
         }
     }
 }
