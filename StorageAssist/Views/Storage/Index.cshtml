@@ -98,10 +98,10 @@
         {
             <div class="card m-1 bg-light">
                 <div class="card-header">
-                    <div class="h3" data-toggle="collapse" data-target="#@RemoveLeadingDigits(RemoveLeadingDigits(userCommon.CommonResourceId).Substring(1))">
+                    <div class="h3" data-toggle="collapse" data-target="#@AddUnderscore(AddUnderscore(userCommon.CommonResourceId).Substring(1))">
                         @userCommon.CommonResource.CommonResourceName
                     </div>
-                    <div id="@RemoveLeadingDigits(RemoveLeadingDigits(userCommon.CommonResourceId).Substring(1))" class="collapse">
+                    <div id="@AddUnderscore(AddUnderscore(userCommon.CommonResourceId).Substring(1))" class="collapse">
                         <div class="row">
                             <div class="text-muted col-8">
                                 CommonID: @userCommon.CommonResourceId
@@ -128,7 +128,7 @@
                     <div class="list-group-item bg-light">
                         <div class="row mb-1">
                             <div class="col-sm-6">
-                                <div class="h4 text-center" data-toggle="collapse" data-target="#@RemoveLeadingDigits(storage.StorageId)">
+                                <div class="h4 text-center" data-toggle="collapse" data-target="#@AddUnderscore(storage.StorageId)">
                                     @storage.StorageName
                                 </div>
                             </div>
@@ -146,7 +146,7 @@
                             </div>
                         </div>
 
-                        <div class="collapse" id="@RemoveLeadingDigits(storage.StorageId)">
+                        <div class="collapse" id="@AddUnderscore(storage.StorageId)">
                             <!--Product table-->
                             <div class="table-responsive text-center">
                                 <table class="table table-sm table-striped table-bordered table-hover">
@@ -197,16 +197,12 @@
 @functions
 {
 
-    public string RemoveLeadingDigits(string str)
+    private string AddUnderscore(string str)
     {
-        while (char.IsDigit(str[0]) || str[0] == '-')
-        {
-            str = str.Substring(1);
-        }
-        return str;
+        return "_" + str;
     }
 
-    public string ExpirationComes(DateTime? date)
+    private string ExpirationComes(DateTime? date)
     {
         if (date == null || ((DateTime)date - DateTime.Now).TotalDays > 3)
         {
@@ -226,7 +222,7 @@
         {
             foreach (var storage in userCommon.CommonResource.Storages)
             {
-                idString += RemoveLeadingDigits(storage.StorageId) + ",#";
+                idString += AddUnderscore(storage.StorageId) + ",#";
             }
             idString = idString.Substring(0, idString.Length - 2);
         }

@@ -1,9 +1,53 @@
-﻿@model CommonResource
+﻿@model List<CommonResource>
 @{
     ViewData["Title"] = "Notes";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Notes</h1>
+<div class="bg-light">
+    <p class="display-4">Notes</p>
+</div>
 
-<p>TEST</p>
+<div class="bg-light">
+    <div class="list-group">
+        @foreach (var common in Model)
+        {
+            <div class="card m-1 bg-light">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-10">
+                            <div>
+                                <div class="h3" data-toggle="collapse" data-target="#@AddUnderscore(common.CommonResourceId)">
+                                    @common.CommonResourceName
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <form class="" method="post">
+                                <button class="btn btn-sm btn-secondary" name="Id" value="@common.CommonResourceId" asp-controller="" asp-action="">Add note</button>
+                                <input type="hidden" name="name" value="@common.CommonResourceName" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            foreach (var note in common.Notes)
+            {
+                <div class="list-group-item bg-light">
+                    <p>@note.NoteName</p>
+                </div>
+                <div class="list-group-item bg-light">@note.NoteText</div>
+            }
+        }
+    </div>
+</div>
+
+@functions
+{
+
+    private string AddUnderscore(string str)
+    {
+        return "_" + str;
+    }
+
+}
