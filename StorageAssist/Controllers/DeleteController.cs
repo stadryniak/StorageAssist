@@ -67,7 +67,8 @@ namespace StorageAssist.Controllers
                     toDelete = await _appUserContext.Notes
                         .Where(n => n.NoteId == id)
                         .FirstOrDefaultAsync();
-                    break;
+                    await Delete(toDelete);
+                    return RedirectToAction("Index", "Notes");
                 default:
                     var error = new ErrorViewModel()
                     {
