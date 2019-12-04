@@ -39,26 +39,26 @@ namespace StorageAssist.Controllers
         }
 
         [Authorize]
-        public IActionResult AddNote(string commonId)
+        public IActionResult AddNote(string Id)
         {
             var note = new Note()
             {
-                CommonResourceId = commonId
+                CommonResourceId = Id
             };
             return View(note);
         }
 
         [Authorize]
-        public async Task<IActionResult> AddNoteDb([Bind("NoteId, CommonResourceId, CommonResource, OwnerId, NoteName, NoteType, NoteText")] Note note, string commonId, string noteName, string text)
+        public async Task<IActionResult> AddNoteDb([Bind("NoteId, CommonResourceId, CommonResource, OwnerId, NoteName, NoteType, NoteText")] Note note, string CommonResourceId, string noteName, string NoteText)
         {
-            var common = await _appUserContext.CommonResources.Where(c => c.CommonResourceId == commonId)
+            var common = await _appUserContext.CommonResources.Where(c => c.CommonResourceId == CommonResourceId)
                 .FirstOrDefaultAsync();
-            note.CommonResourceId = commonId;
+            note.CommonResourceId = CommonResourceId;
             note.CommonResource = common;
             note.OwnerId = _user.GetUserId(User);
             note.NoteName = noteName;
-            note.NoteType = null;
-            note.NoteText = text;
+            note.NoteType = null; //unused parameter
+            note.NoteText = NoteText;
             common.Notes.Add(note);
             //add to database
             _appUserContext.Notes.Add(note);

@@ -132,7 +132,7 @@ namespace StorageAssist.Models
         [Required]
         public string OwnerId { get; set; }
         public string NoteName { get; set; }
-        public string NoteType { get; set; }
+        public string NoteType { get; set; } //unused
         public string NoteText { get; set; }
     }
 

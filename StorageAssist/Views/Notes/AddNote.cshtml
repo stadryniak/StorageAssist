@@ -1,73 +1,29 @@
-﻿
-@{
-    ViewData["Title"] = "AddNote";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+﻿@model Note
 
 <div class="bg-light">
-    <p class="display-4">Add product</p>
+    <p class="display-4">Add note</p>
 </div>
 
 <div class="bg-light">
     <div class="m-1">
-        <form class="form-group" asp-controller="Product" asp-action="AddProductDb">
+        <form class="form-group" asp-controller="Notes" asp-action="AddNoteDb">
             <!-- product name -->
             <div class="form-group">
-                <label class="font-weight-bold">Product name:</label>
-                <input class="form-control" type="text" maxlength="50" name="productName" />
+                <label class="font-weight-bold">Note name:</label>
+                <input class="form-control" type="text" maxlength="50" name="noteName" />
             </div>
 
-            <!-- type selection -->
+            <!-- text -->
             <div class="form-group">
-                <div class="font-weight-bold">Product type:</div>
-                <div class="form-group m-2">
-                    @foreach (var type in Enum.GetValues(typeof(ProductType)))
-                    {
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="Type" value="@type.ToString()" />
-                            <label class="form-check-label">@type.ToString()</label>
-                        </div>
-                    }
-                </div>
-            </div>
-            <!-- type selection end -->
-            <!-- quantity type -->
-            <div class="form-group">
-                <select name="quantityType" class="form-control">
-                    <option value="Count">Count</option>
-                    <option value="Weight">Weight</option>
-                </select>
-            </div>
-
-            <!-- quantity -->
-            <div class="form-group">
-                <label class="font-weight-bold">Quantity</label>
-                <input name="quantity" class="d-block form-control" type="number" value="1" min="0" step="0.01" />
-            </div>
-
-            <!-- buy date -->
-            <div class="form-group">
-                <label class="font-weight-bold">Buy date</label>
-                <input name="buyDate" class="form-control" type="date" value="@DateTime.Today.Date.ToString("yyyy-MM-dd")">
-            </div>
-
-            <!-- expiration date -->
-            <div class="form-group">
-                <label class="font-weight-bold">Expiration date</label>
-                <input name="expirationDate" class="form-control" type="date" value="">
-            </div>
-
-            <!-- comment -->
-            <div class="form-group">
-                <label class="font-weight-bold">Comment</label>
-                <input name="comment" class="form-control" type="text" maxlength="255" />
+                <label class="font-weight-bold">Note text</label>
+                <textarea name="noteText" class="form-control" type="text" rows="3" maxlength="1023"></textarea>
             </div>
 
             <!-- submit button -->
             <div class="m-2">
                 <button class="btn btn-success" type="submit">Add product</button>
             </div>
-            <input name="storageId" type="hidden" value="@Model.StorageId" />
+            <input name="commonResourceId" type="hidden" value="@Model.CommonResourceId" />
         </form>
     </div>
 </div>
