@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Razor.Language;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using StorageAssist.Models;
 
@@ -39,7 +35,7 @@ namespace StorageAssist.Controllers
             {
                 var error = new ErrorViewModel()
                 {
-                    ErrorMessage = "Error 31"
+                    ErrorMessage = "Error 31. Invalid type."
                 };
                 return RedirectToAction("Index", "Error", error);
             }
@@ -47,7 +43,7 @@ namespace StorageAssist.Controllers
             var toDelete = Activator.CreateInstance(t);
             switch (toDelete)
             {
-                case CommonResource common:
+                case CommonResource _:
                     toDelete = await _appUserContext.CommonResources
                         .Where(c => c.CommonResourceId == id)
                         .Include(c => c.Storages)
@@ -56,18 +52,18 @@ namespace StorageAssist.Controllers
                         .Include(c => c.UserCommonResource)
                         .FirstOrDefaultAsync();
                     break;
-                case Storage storage:
+                case Storage _:
                     toDelete = await _appUserContext.Storages
                         .Where(s => s.StorageId == id)
                         .Include(s => s.Products)
                         .FirstOrDefaultAsync();
                     break;
-                case Product product:
+                case Product _:
                     toDelete = await _appUserContext.Products
                         .Where(p => p.ProductId == id)
                         .FirstOrDefaultAsync();
                     break;
-                case Note note:
+                case Note _:
                     toDelete = await _appUserContext.Notes
                         .Where(n => n.NoteId == id)
                         .FirstOrDefaultAsync();
