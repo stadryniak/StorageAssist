@@ -24,15 +24,9 @@ namespace StorageAssist.Controllers
             return RedirectToAction("Index", "Storage");
         }
 
-        [HttpGet]
-        public IActionResult AddProduct()
-        {
-            return View();
-        }
 
-
-        [HttpPost]
         [Authorize]
+        [HttpPost]
         public IActionResult AddProduct(string storageId)
         {
             var product = new Product()
