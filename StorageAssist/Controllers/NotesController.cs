@@ -53,6 +53,14 @@ namespace StorageAssist.Controllers
         [Authorize]
         public async Task<IActionResult> AddNoteDb([Bind("NoteId, CommonResourceId, CommonResource, OwnerId, NoteName, NoteType, NoteText")] Note note, string commonResourceId, string noteName, string noteText)
         {
+            if (string.IsNullOrWhiteSpace(noteName))
+            {
+                var error = new ErrorViewModel()
+                {
+                    ErrorMessage = "Error 88: note name is empty."
+                };
+                return RedirectToAction("Index", "Error");
+            }
             var common = await _appUserContext.CommonResources.Where(c => c.CommonResourceId == commonResourceId)
                 .FirstOrDefaultAsync();
             note.CommonResourceId = commonResourceId;
