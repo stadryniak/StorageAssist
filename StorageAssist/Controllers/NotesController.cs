@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StorageAssist.Models;
 
+//TODO: edit note, multiline text, check if note is empty (and disallow adding w/ error message)
+
 namespace StorageAssist.Controllers
 {
     public class NotesController : Controller
@@ -49,16 +51,16 @@ namespace StorageAssist.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> AddNoteDb([Bind("NoteId, CommonResourceId, CommonResource, OwnerId, NoteName, NoteType, NoteText")] Note note, string CommonResourceId, string noteName, string NoteText)
+        public async Task<IActionResult> AddNoteDb([Bind("NoteId, CommonResourceId, CommonResource, OwnerId, NoteName, NoteType, NoteText")] Note note, string commonResourceId, string noteName, string noteText)
         {
-            var common = await _appUserContext.CommonResources.Where(c => c.CommonResourceId == CommonResourceId)
+            var common = await _appUserContext.CommonResources.Where(c => c.CommonResourceId == commonResourceId)
                 .FirstOrDefaultAsync();
-            note.CommonResourceId = CommonResourceId;
+            note.CommonResourceId = commonResourceId;
             note.CommonResource = common;
             note.OwnerId = _user.GetUserId(User);
             note.NoteName = noteName;
             note.NoteType = null; //unused parameter
-            note.NoteText = NoteText;
+            note.NoteText = noteText;
             common.Notes.Add(note);
             //add to database
             _appUserContext.Notes.Add(note);
