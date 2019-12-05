@@ -93,5 +93,13 @@ namespace StorageAssist.Controllers
             }
             return View(note);
         }
+
+        [Authorize]
+        public async Task<IActionResult> EditNoteDb([Bind("NoteId, CommonResourceId, CommonResource, OwnerId, NoteName, NoteType, NoteText")] Note note)
+        {
+            _appUserContext.Entry(note).State = EntityState.Modified;
+            await _appUserContext.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
     }
 }

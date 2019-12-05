@@ -1,8 +1,31 @@
-﻿
-@{
-    ViewData["Title"] = "EditNote";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+﻿@model Note
 
-<h1>EditNote</h1>
+<div class="bg-light">
+    <p class="display-4">Add note</p>
+</div>
 
+<div class="bg-light">
+    <div class="m-1">
+        <form class="form-group" asp-controller="Notes" asp-action="EditNoteDb">
+            <!-- Note name -->
+            <div class="form-group">
+                <label class="font-weight-bold">Note name:</label>
+                <input class="form-control" type="text" maxlength="50" name="noteName" value="@Model.NoteName"/>
+            </div>
+
+            <!-- text -->
+            <div class="form-group">
+                <label class="font-weight-bold">Note text</label>
+                <textarea name="noteText" class="form-control" type="text" rows="3" maxlength="1023">@Model.NoteText</textarea>
+            </div>
+
+            <!-- submit button -->
+            <div class="m-2">
+                <button class="btn btn-success" type="submit">Edit note</button>
+            </div>
+            <input type="hidden" name="noteId" value="@Model.NoteId"/>
+            <input type="hidden" name="ownerId" value="@Model.OwnerId"/>
+            <input type="hidden" name="commonResourceId" value="@Model.CommonResourceId"/>
+        </form>
+    </div>
+</div>
