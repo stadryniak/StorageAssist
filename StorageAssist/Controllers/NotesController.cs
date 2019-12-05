@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StorageAssist.Models;
 
-//TODO: edit note, multiline text, check if note is empty (and disallow adding w/ error message)
+//TODO: edit note, multiline text(?)
 
 namespace StorageAssist.Controllers
 {
@@ -41,11 +41,11 @@ namespace StorageAssist.Controllers
         }
 
         [Authorize]
-        public IActionResult AddNote(string Id)
+        public IActionResult AddNote(string id)
         {
             var note = new Note()
             {
-                CommonResourceId = Id
+                CommonResourceId = id
             };
             return View(note);
         }
@@ -53,7 +53,7 @@ namespace StorageAssist.Controllers
         [Authorize]
         public async Task<IActionResult> AddNoteDb([Bind("NoteId, CommonResourceId, CommonResource, OwnerId, NoteName, NoteType, NoteText")] Note note, string commonResourceId, string noteName, string noteText)
         {
-            if (string.IsNullOrWhiteSpace(noteName))
+            if (string.IsNullOrEmpty(noteName))
             {
                 var error = new ErrorViewModel()
                 {
@@ -78,5 +78,20 @@ namespace StorageAssist.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
+        public async Task<IActionResult> EditNote(string id)
+        {
+            //get product from db
+            var note = await _appUserContext.Notes.FirstOrDefaultAsync(n => n.NoteId == id);
+            if (note == null)
+            {
+                var error = new ErrorViewModel()
+                {
+                    ErrorMessage = "Invalid note"
+                };
+                return RedirectToAction("Index", "Error", error);
+            }
+            return View(note);
+        }
     }
 }
