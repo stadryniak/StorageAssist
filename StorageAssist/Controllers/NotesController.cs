@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -9,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StorageAssist.Models;
 
-//TODO: edit note, multiline text(?)
+//TODO: multiline text(?)
 
 namespace StorageAssist.Controllers
 {
@@ -59,7 +56,7 @@ namespace StorageAssist.Controllers
                 {
                     ErrorMessage = "Error 88: note name is empty."
                 };
-                return RedirectToAction("Index", "Error");
+                return RedirectToAction("Index", "Error", error);
             }
             var common = await _appUserContext.CommonResources.Where(c => c.CommonResourceId == commonResourceId)
                 .FirstOrDefaultAsync();
