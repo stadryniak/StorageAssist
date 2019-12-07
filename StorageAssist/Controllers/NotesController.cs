@@ -51,9 +51,9 @@ namespace StorageAssist.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> AddNoteDb([Bind("NoteId, CommonResourceId, CommonResource, OwnerId, NoteName, NoteType, NoteText")] Note note, string commonResourceId, string noteName, string noteText)
+        public async Task<IActionResult> AddNoteDb([Bind("NoteId, CommonResourceId, CommonResource, OwnerId, NoteName, NoteType, NoteText")] Note note)
         {
-            if (string.IsNullOrEmpty(noteName))
+            if (string.IsNullOrEmpty(note.NoteName))
             {
                 var error = new ErrorViewModel()
                 {
@@ -61,14 +61,13 @@ namespace StorageAssist.Controllers
                 };
                 return RedirectToAction("Index", "Error");
             }
-            var common = await _appUserContext.CommonResources.Where(c => c.CommonResourceId == commonResourceId)
+
+            note.NoteText = note.NoteText.Replace("\r\n", " <br> ");
+            var common = await _appUserContext.CommonResources.Where(c => c.CommonResourceId == note.CommonResourceId)
                 .FirstOrDefaultAsync();
-            note.CommonResourceId = commonResourceId;
             note.CommonResource = common;
             note.OwnerId = _user.GetUserId(User);
-            note.NoteName = noteName;
             note.NoteType = null; //unused parameter
-            note.NoteText = noteText;
             common.Notes.Add(note);
             //add to database
             _appUserContext.Notes.Add(note);
