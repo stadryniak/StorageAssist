@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -82,7 +83,7 @@ namespace StorageAssist.Controllers
                 common = await _appUserContext.CommonResources.Where(c => c.CommonResourceId == commonResourceId)
                     .Include(c => c.Storages)
                     .FirstOrDefaultAsync();
-                if (common== null)
+                if (common == null)
                 {
                     var error = new ErrorViewModel()
                     {
@@ -139,7 +140,7 @@ namespace StorageAssist.Controllers
 
             //get requested commonResources
             var common = await _appUserContext.CommonResources.Where(c => c.CommonResourceId == commonResourceId).FirstOrDefaultAsync();
-            if (common== null)
+            if (common == null)
             {
                 var error = new ErrorViewModel();
                 return RedirectToAction("Index", "Error", error);
@@ -156,8 +157,19 @@ namespace StorageAssist.Controllers
             user.UserCommonResource.Add(join);
 
             //save to database
-            _appUserContext.ApplicationUser.Update(user);
-            await _appUserContext.SaveChangesAsync();
+            try
+            {
+                _appUserContext.ApplicationUser.Update(user);
+                await _appUserContext.SaveChangesAsync();
+            }
+            catch (InvalidOperationException)
+            {
+                var error = new ErrorViewModel()
+                {
+                    ErrorMessage = "Error 101: User already have this common resource added."
+                };
+                return RedirectToAction("Index", "Error", error);
+            }
 
             return RedirectToAction("Index");
         }
