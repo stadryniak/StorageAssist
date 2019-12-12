@@ -103,10 +103,10 @@
         {
             <div class="card m-1 bg-light">
                 <div class="card-header">
-                    <div class="h3" data-toggle="collapse" data-target="#@AddUnderscore(AddUnderscore(userCommon.CommonResourceId).Substring(1))">
+                    <div class="h3" data-toggle="collapse" data-target="#@AddUnderscore(AddUnderscore(userCommon.CommonResourceId))">
                         @userCommon.CommonResource.CommonResourceName
                     </div>
-                    <div id="@AddUnderscore(AddUnderscore(userCommon.CommonResourceId).Substring(1))" class="collapse">
+                    <div id="@AddUnderscore(AddUnderscore(userCommon.CommonResourceId))" class="collapse">
                         <div class="row">
                             <div class="text-muted col-8">
                                 CommonID: @userCommon.CommonResourceId
