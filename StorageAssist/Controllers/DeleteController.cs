@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,8 @@ namespace StorageAssist.Controllers
             return View();
         }
 
+        [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteTask(string id, string typePost)
         {
             var type = "StorageAssist.Models." + typePost;
@@ -85,6 +88,8 @@ namespace StorageAssist.Controllers
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="toDelete">Object to delete from database</param>
+        [Authorize]
+        [ValidateAntiForgeryToken]
         private async Task Delete<T>(T toDelete)
         {
             switch (toDelete)

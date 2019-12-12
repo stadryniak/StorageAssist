@@ -122,6 +122,7 @@ namespace StorageAssist.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Authorize]
         public async Task<IActionResult> AddExistingCommon(string commonResourceId)
         {
