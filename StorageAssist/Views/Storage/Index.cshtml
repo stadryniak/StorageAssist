@@ -1,4 +1,5 @@
-﻿@model ApplicationUser
+﻿@using System.Security.Claims
+@model ApplicationUser
 <!--Title-->
 <div class="bg-light">
     <p class="display-4">Manage storages</p>
@@ -109,7 +110,15 @@
                     <div id="@AddUnderscore(AddUnderscore(userCommon.CommonResourceId))" class="collapse">
                         <div class="row">
                             <div class="text-muted col-8">
-                                CommonID: @userCommon.CommonResourceId
+                                <p>
+                                    CommonID: @userCommon.CommonResourceId
+                                </p>
+                                @if (userCommon.CommonResource.OwnerId == this.User.FindFirstValue(ClaimTypes.NameIdentifier))
+                                {
+                                    <p>
+                                        You are owner of this common resources.
+                                    </p>
+                                }
                             </div>
                             <form class="form-group col-4" asp-controller="Delete" asp-action="Index">
                                 <button class="btn btn-sm btn-danger">Delete common resources</button>
@@ -210,24 +219,15 @@
         {
             return "";
         }
-        if (((DateTime)date - DateTime.Now).TotalDays < 2)
-        {
-            return "bg-danger rounded text-white";
-        }
-        return "bg-warning rounded";
+        return ((DateTime)date - DateTime.Now).TotalDays < 1 ? "bg-danger rounded text-white" : "bg-warning rounded";
     }
 
     private string StoragesIdString(UserCommonResource userCommon)
     {
-        string idString = "";
-        if (userCommon.CommonResource.Storages.Count != 0)
-        {
-            foreach (var storage in userCommon.CommonResource.Storages)
-            {
-                idString += AddUnderscore(storage.StorageId) + ",#";
-            }
-            idString = idString.Substring(0, idString.Length - 2);
-        }
+        var idString = "";
+        if (userCommon.CommonResource.Storages.Count == 0) return idString;
+        idString = userCommon.CommonResource.Storages.Aggregate(idString, (current, storage) => current + (AddUnderscore(storage.StorageId) + ",#"));
+        idString = idString.Substring(0, idString.Length - 2);
         return idString;
     }
 
