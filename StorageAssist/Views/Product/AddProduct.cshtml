@@ -1,4 +1,8 @@
 ﻿@model Product
+@{
+    ViewData["Title"] = "Add product";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
 <div class="bg-light">
     <p class="display-4">Add product</p>
@@ -27,7 +31,6 @@
                 </div>
             </div>
             <!-- type selection end -->
-            
             <!-- quantity type -->
             <div class="form-group">
                 <select name="quantityType" class="form-control">
@@ -35,25 +38,25 @@
                     <option value="Weight">Weight</option>
                 </select>
             </div>
-            
+
             <!-- quantity -->
             <div class="form-group">
                 <label class="font-weight-bold">Quantity</label>
-                <input name="quantity" class="d-block form-control" type="number" value="1" min="0" step="0.01"/>
+                <input name="quantity" class="d-block form-control" type="number" value="1" min="0" step="0.01" />
             </div>
-            
+
             <!-- buy date -->
             <div class="form-group">
                 <label class="font-weight-bold">Buy date</label>
                 <input name="buyDate" class="form-control" type="date" value="@DateTime.Today.Date.ToString("yyyy-MM-dd")">
             </div>
-            
+
             <!-- expiration date -->
             <div class="form-group">
                 <label class="font-weight-bold">Expiration date</label>
                 <input name="expirationDate" class="form-control" type="date" value="">
             </div>
-            
+
             <!-- comment -->
             <div class="form-group">
                 <label class="font-weight-bold">Comment</label>
@@ -64,7 +67,7 @@
             <div class="m-2">
                 <button class="btn btn-success" type="submit">Add product</button>
             </div>
-            <input  name="storageId" type="hidden" value="@Model.StorageId"/>
+            <input name="storageId" type="hidden" value="@Model.StorageId" />
         </form>
     </div>
 </div>

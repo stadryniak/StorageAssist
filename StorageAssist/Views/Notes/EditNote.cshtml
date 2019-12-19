@@ -1,4 +1,8 @@
 ﻿@model Note
+@{
+    ViewData["Title"] = "Edit note";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
 <div class="bg-light">
     <p class="display-4">Add note</p>
@@ -10,7 +14,7 @@
             <!-- Note name -->
             <div class="form-group">
                 <label class="font-weight-bold">Note name:</label>
-                <input class="form-control" type="text" maxlength="50" name="noteName" value="@Model.NoteName"/>
+                <input class="form-control" type="text" maxlength="50" name="noteName" value="@Model.NoteName" />
             </div>
 
             <!-- text -->
@@ -23,9 +27,9 @@
             <div class="m-2">
                 <button class="btn btn-success" type="submit">Edit note</button>
             </div>
-            <input type="hidden" name="noteId" value="@Model.NoteId"/>
-            <input type="hidden" name="ownerId" value="@Model.OwnerId"/>
-            <input type="hidden" name="commonResourceId" value="@Model.CommonResourceId"/>
+            <input type="hidden" name="noteId" value="@Model.NoteId" />
+            <input type="hidden" name="ownerId" value="@Model.OwnerId" />
+            <input type="hidden" name="commonResourceId" value="@Model.CommonResourceId" />
         </form>
     </div>
 </div>

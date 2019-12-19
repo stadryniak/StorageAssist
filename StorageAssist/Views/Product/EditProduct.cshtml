@@ -1,5 +1,8 @@
 ﻿@model Product
-
+@{
+    ViewData["Title"] = "Edit product";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
 <div class="bg-light">
     <p class="display-4">Edit product</p>
@@ -65,7 +68,7 @@
                 <button class="btn btn-success" type="submit" asp-controller="Product" asp-action="EditProductDb">Confirm edit</button>
             </div>
             <input name="storageId" type="hidden" value="@Model.StorageId" />
-            <input name="productId" type="hidden" value="@Model.ProductId"/>
+            <input name="productId" type="hidden" value="@Model.ProductId" />
         </form>
     </div>
 </div>
