@@ -32,29 +32,32 @@
                 </div>
                 @foreach (var note in common.Notes)
                 {
-                    <div class="list-group-item bg-light">
-                        <div class="row">
+                    <div class="collapse" id="@AddUnderscore(common.CommonResourceId)">
 
-                            <div class="col-8">
-                                <h5>@note.NoteName</h5>
-                            </div>
-                            <div class="col-2">
-                                <form method="post">
-                                    <button class="btn btn-sm btn-secondary" name="Id" value="@note.NoteId" asp-controller="Notes" asp-action="EditNote">Edit note</button>
-                                </form>
-                            </div>
-                            <div class="col-2">
-                                <form method="post">
-                                    <button class="btn btn-sm btn-danger" name="Id" value="@note.NoteId" asp-controller="Delete" asp-action="Index">Delete note</button>
-                                    <input type="hidden" name="noteId" value="@note.NoteId" />
-                                    <input type="hidden" name="name" value="@note.NoteName" />
-                                    <input type="hidden" name="typePost" value="Note" />
-                                </form>
+                        <div class="list-group-item bg-light">
+                            <div class="row">
+
+                                <div class="col-8">
+                                    <h5>@note.NoteName</h5>
+                                </div>
+                                <div class="col-2">
+                                    <form method="post">
+                                        <button class="btn btn-sm btn-secondary" name="Id" value="@note.NoteId" asp-controller="Notes" asp-action="EditNote">Edit note</button>
+                                    </form>
+                                </div>
+                                <div class="col-2">
+                                    <form method="post">
+                                        <button class="btn btn-sm btn-danger" name="Id" value="@note.NoteId" asp-controller="Delete" asp-action="Index">Delete note</button>
+                                        <input type="hidden" name="noteId" value="@note.NoteId" />
+                                        <input type="hidden" name="name" value="@note.NoteName" />
+                                        <input type="hidden" name="typePost" value="Note" />
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="list-group-item bg-light ml-1">
-                        @note.NoteText
+                        <div class="list-group-item bg-light ml-1">
+                            @note.NoteText
+                        </div>
                     </div>
                 }
             </div>
