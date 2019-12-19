@@ -113,7 +113,7 @@
                                 <p>
                                     CommonID: @userCommon.CommonResourceId
                                 </p>
-                                @if (userCommon.CommonResource.OwnerId == this.User.FindFirstValue(ClaimTypes.NameIdentifier))
+                                @if (userCommon.CommonResource.OwnerId == User.FindFirstValue(ClaimTypes.NameIdentifier))
                                 {
                                     <p>
                                         You are owner of this common resources.
