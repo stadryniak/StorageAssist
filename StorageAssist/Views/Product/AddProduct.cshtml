@@ -12,14 +12,16 @@
     <div class="m-1">
         <form class="form-group" asp-controller="Product" asp-action="AddProductDb">
             <!-- product name -->
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label class="font-weight-bold">Product name:</label>
-                <input class="form-control" type="text" maxlength="50" name="productName" />
+                <label asp-for="ProductName" class="font-weight-bold"></label>
+                <input asp-for="ProductName" class="form-control" />
+                <span asp-validation-for="ProductName" class="text-danger"></span>
             </div>
 
             <!-- type selection -->
             <div class="form-group">
-                <div class="font-weight-bold">Product type:</div>
+                <label asp-for="Type" class="font-weight-bold"></label>
                 <div class="form-group m-2">
                     @foreach (var type in Enum.GetValues(typeof(ProductType)))
                     {
@@ -30,6 +32,7 @@
                     }
                 </div>
             </div>
+
             <!-- type selection end -->
             <!-- quantity type -->
             <div class="form-group">
@@ -72,3 +75,6 @@
     </div>
 </div>
 
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

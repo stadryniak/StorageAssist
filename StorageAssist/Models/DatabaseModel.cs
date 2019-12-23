@@ -179,8 +179,11 @@ namespace StorageAssist.Models
         public Storage Storage { get; set; }
 
         //what is inside, to determinate default expiration date
+        [DisplayName("Product type")]
         [DefaultValue(ProductType.Other)]
         public ProductType Type { get; set; }
+        [StringLength(20, MinimumLength = 2)]
+        [DisplayName("Product name")]
         [Required]
         public string ProductName { get; set; }
 

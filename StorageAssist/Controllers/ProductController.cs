@@ -39,6 +39,14 @@ namespace StorageAssist.Controllers
         {
             //add quantity to product
             product.Quantity = double.Parse(quantity, System.Globalization.CultureInfo.InvariantCulture);
+            if (!ModelState.IsValid)
+            {
+                var error = new ErrorViewModel()
+                {
+                    ErrorMessage = "Error 012. Invalid product model."
+                };
+                return RedirectToAction("Index", "Error", error);
+            }
             // get requested storage from db
             var storage = await _appUserContext.Storages.Where(s => s.StorageId == product.StorageId)
                 .Include(s => s.Products)
@@ -85,9 +93,17 @@ namespace StorageAssist.Controllers
         public async Task<IActionResult> EditProductDb([Bind("ProductId, StorageId, ProductName, Type, QuantityType, BuyDate, ExpirationDate, Comment")] Product product, string quantity)
         {
             product.Quantity = double.Parse(quantity, System.Globalization.CultureInfo.InvariantCulture);
+            if (!ModelState.IsValid)
+            {
+                var error = new ErrorViewModel()
+                {
+                    ErrorMessage = "Error 012. Invalid product model."
+                };
+                return RedirectToAction("Index", "Error", error);
+            }
+
             _appUserContext.Entry(product).State = EntityState.Modified;
             await _appUserContext.SaveChangesAsync();
-
             return RedirectToAction("Index");
         }
     }
