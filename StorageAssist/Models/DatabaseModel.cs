@@ -182,9 +182,10 @@ namespace StorageAssist.Models
         [DisplayName("Product type")]
         [DefaultValue(ProductType.Other)]
         public ProductType Type { get; set; }
-        [StringLength(20, MinimumLength = 2)]
+
+        [Required(ErrorMessage = "Product name must be provided")]
+        [StringLength(20, ErrorMessage = "Product name must contain 2-20 characters", MinimumLength = 2)]
         [DisplayName("Product name")]
-        [Required]
         public string ProductName { get; set; }
 
         //determinate which Quantity metric should be applied
