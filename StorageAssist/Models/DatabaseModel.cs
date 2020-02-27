@@ -131,8 +131,15 @@ namespace StorageAssist.Models
         //use to (dis)allow delete
         [Required]
         public string OwnerId { get; set; }
+
+        [Required(ErrorMessage = "Note name cannot be empty")]
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "Note name must contain 2-100 characters")]
+        [DisplayName("Note name")]
         public string NoteName { get; set; }
+
         public string NoteType { get; set; } //unused
+        
+        [DisplayName("Note text")]
         public string NoteText { get; set; }
     }
 
@@ -190,7 +197,12 @@ namespace StorageAssist.Models
 
         //determinate which Quantity metric should be applied
         [Required]
+        [DisplayName("Quantity type")]
         public QuantityType QuantityType { get; set; }
+
+        [Required(ErrorMessage = "Quantity cannot be empty")]
+        [Range(0, double.MaxValue, ErrorMessage = "Invalid number. Number must be positive")]
+        [DisplayName("Quantity")]
         public double Quantity { get; set; }
 
         public DateTime BuyDate { get; set; }

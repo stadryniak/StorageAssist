@@ -13,14 +13,16 @@
         <form class="form-group" asp-controller="Notes" asp-action="EditNoteDb">
             <!-- Note name -->
             <div class="form-group">
-                <label class="font-weight-bold">Note name:</label>
-                <input class="form-control" type="text" maxlength="50" name="noteName" value="@Model.NoteName" />
+                <label asp-for="NoteName" class="font-weight-bold"></label>
+                <input asp-for="NoteName" class="form-control" />
+                <span asp-validation-for="NoteName" class="text-danger"></span>
             </div>
 
             <!-- text -->
             <div class="form-group">
-                <label class="font-weight-bold">Note text</label>
-                <textarea name="noteText" class="form-control" type="text" rows="3" maxlength="1023">@Model.NoteText</textarea>
+                <label asp-for="NoteText" class="font-weight-bold"></label>
+                <textarea asp-for="NoteText" class="form-control" type="text" rows="3" maxlength="1023"></textarea>
+                <span asp-validation-for="NoteText" class="text-danger"></span>
             </div>
 
             <!-- submit button -->
