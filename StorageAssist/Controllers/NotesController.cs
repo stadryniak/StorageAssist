@@ -58,8 +58,6 @@ namespace StorageAssist.Controllers
                 };
                 return RedirectToAction("Index", "Error", error);
             }
-
-            note.NoteText = note.NoteText.Replace("\r\n", " <br> ");
             var common = await _appUserContext.CommonResources.Where(c => c.CommonResourceId == note.CommonResourceId)
                 .FirstOrDefaultAsync();
             note.CommonResource = common;
