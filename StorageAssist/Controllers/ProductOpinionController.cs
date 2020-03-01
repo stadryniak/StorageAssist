@@ -2,17 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using StorageAssist.Models;
 
 namespace StorageAssist.Controllers
 {
+    [Authorize]
     public class ProductOpinionController : Controller
     {
-        // GET: ProductOpinion
-        public ActionResult Index()
+        private readonly AppUserContext _dbContext;
+        private readonly UserManager<ApplicationUser> _user;
+        public ProductOpinionController(AppUserContext appUserContext, UserManager<ApplicationUser> user)
         {
-            return View();
+            _dbContext = appUserContext;
+            _user = user;
+        }
+
+        // GET: ProductOpinion
+        public async Task<ActionResult> Index()
+        {
+            var user = await _dbContext.ApplicationUser
+                .Where(u => u.Id == _user.GetUserId(HttpContext.User))
+                    .Include(u => u.ProductOpinion)
+                .FirstOrDefaultAsync();
+            return View(user.ProductOpinion);
         }
 
         // GET: ProductOpinion/Details/5
