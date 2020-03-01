@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using StorageAssist.Models;
 
 namespace StorageAssist.Models
 {
@@ -56,6 +57,8 @@ namespace StorageAssist.Models
 
             base.OnModelCreating(modelBuilder);
         }
+
+        public DbSet<StorageAssist.Models.ProductOpinion> ProductOpinion { get; set; }
     }
 
     public enum StorageType
@@ -80,17 +83,18 @@ namespace StorageAssist.Models
         public ApplicationUser()
         {
             UserCommonResource = new List<UserCommonResource>();
+            ProductOpinion = new List<ProductOpinion>();
         }
         public List<UserCommonResource> UserCommonResource { get; set; }
         public List<ProductOpinion> ProductOpinion { get; set; }
     }
 
-    [Table("ProductsInfo")]
+    [Table("ProductsOpinion")]
     public class ProductOpinion
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string ProductInfoId;
+        public string ProductOpinionId { get; set; }
 
         [Required(ErrorMessage = "Product name must be specified")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Product name must be 2-100 characters long")]
@@ -99,7 +103,7 @@ namespace StorageAssist.Models
 
         [DisplayName("Price")]
         [Range(0, double.MaxValue, ErrorMessage = "Price cannot be negative (or enormously big)")]
-        public decimal Price { get; set; }
+        public double Price { get; set; }
 
         [DisplayName("Price opinion")]
         [Range(0,10, ErrorMessage = "Price opinion must be in 0 - 10 range")]
