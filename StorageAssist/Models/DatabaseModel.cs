@@ -51,6 +51,7 @@ namespace StorageAssist.Models
             //Product buyDate defaults to current day and time
             modelBuilder.Entity<Product>()
                 .Property(p => p.BuyDate)
+                // ReSharper disable once StringLiteralTypo
                 .HasDefaultValueSql("getdate()");
 
             base.OnModelCreating(modelBuilder);
@@ -81,6 +82,44 @@ namespace StorageAssist.Models
             UserCommonResource = new List<UserCommonResource>();
         }
         public List<UserCommonResource> UserCommonResource { get; set; }
+        public List<ProductOpinion> ProductOpinion { get; set; }
+    }
+
+    [Table("ProductsInfo")]
+    public class ProductOpinion
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string ProductInfoId;
+
+        [Required(ErrorMessage = "Product name must be specified")]
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "Product name must be 2-100 characters long")]
+        [DisplayName("Product name")]
+        public string ProductName { get; set; }
+
+        [DisplayName("Price")]
+        [Range(0, double.MaxValue, ErrorMessage = "Price cannot be negative (or enormously big)")]
+        public decimal Price { get; set; }
+
+        [DisplayName("Price opinion")]
+        [Range(0,10, ErrorMessage = "Price opinion must be in 0 - 10 range")]
+        public double PriceOpinion { get; set; }
+
+        [DisplayName("Quality")]
+        [Range(0, 10, ErrorMessage = "Quality must be in 0 - 10 range")]
+        public double Quality { get; set; }
+
+        [DisplayName("Value")]
+        [Range(0, double.MaxValue, ErrorMessage = "Value must be in 0 - 10")]
+        public double Value { get; set; } 
+
+        [DisplayName("Quality/Price ratio")]
+        [Range(0, double.MaxValue, ErrorMessage = "Price cannot be negative (or enormously big)")]
+        public double PriceQualityRatio { get; set; } // computed by controller
+
+        [DisplayName("Description")]
+        [StringLength(5000, ErrorMessage = "Description too long")]
+        public string Description { get; set; }
     }
 
     [Table("CommonResources")]
@@ -138,7 +177,7 @@ namespace StorageAssist.Models
         public string NoteName { get; set; }
 
         public string NoteType { get; set; } //unused
-        
+
         [DisplayName("Note text")]
         public string NoteText { get; set; }
     }
