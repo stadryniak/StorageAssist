@@ -33,13 +33,18 @@ namespace StorageAssist.Controllers
         }
 
         // GET: ProductOpinion/Details/5
-        public ActionResult Details(int id)
+        public async  Task<ActionResult> Details(string productId)
         {
-            return View();
+            var user = await _dbContext.ApplicationUser
+                .Where(u => u.Id == _user.GetUserId(HttpContext.User))
+                .Include(u => u.ProductOpinion)
+                .FirstOrDefaultAsync();
+            var product = user.ProductOpinion.FirstOrDefault(p => p.ProductOpinionId == productId);
+            return View(product);
         }
 
         // GET: ProductOpinion/Create
-        public ActionResult Create()
+        public ActionResult Add()
         {
             return View();
         }
