@@ -11,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Add">
+        <form asp-action="AddProductOpinionDb" asp-controller="ProductOpinion">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ProductName" class="control-label"></label>
@@ -39,17 +39,12 @@
                 <span asp-validation-for="Value" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PriceQualityRatio" class="control-label"></label>
-                <input asp-for="PriceQualityRatio" class="form-control" />
-                <span asp-validation-for="PriceQualityRatio" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Add opinion" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -59,3 +54,6 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

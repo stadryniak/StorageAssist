@@ -114,7 +114,7 @@ namespace StorageAssist.Models
         public double Quality { get; set; }
 
         [DisplayName("Value")]
-        [Range(0, double.MaxValue, ErrorMessage = "Value must be in 0 - 10")]
+        [Range(0, 10, ErrorMessage = "Value must be in 0 - 10 range")]
         public double Value { get; set; } 
 
         [DisplayName("Quality/Price ratio")]

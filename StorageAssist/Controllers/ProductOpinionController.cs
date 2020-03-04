@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using StorageAssist.Models;
 
@@ -32,8 +33,7 @@ namespace StorageAssist.Controllers
             return View(user.ProductOpinion);
         }
 
-        // GET: ProductOpinion/Details/5
-        public async  Task<ActionResult> Details(string productId)
+        public async Task<ActionResult> Details(string productId)
         {
             var user = await _dbContext.ApplicationUser
                 .Where(u => u.Id == _user.GetUserId(HttpContext.User))
@@ -43,28 +43,34 @@ namespace StorageAssist.Controllers
             return View(product);
         }
 
-        // GET: ProductOpinion/Create
-        public ActionResult Add()
+        [Authorize]
+        public ActionResult AddProductOpinion()
         {
             return View();
         }
 
-        // POST: ProductOpinion/Create
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> AddProductOpinionDb([Bind("ProductName, Price, PriceOpinion, Quality, Value, Description")] ProductOpinion productOpinion)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction(nameof(Index));
+                ErrorViewModel error = new ErrorViewModel()
+                {
+                    ErrorMessage = "Invalid data"
+                };
+                return RedirectToAction("Index", "Error");
             }
-            catch
-            {
-                return View();
-            }
+            double priceQualityRatio = productOpinion.Quality / productOpinion.Price;
+            productOpinion.PriceQualityRatio = priceQualityRatio;
+            var user = await _dbContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(User)).FirstOrDefaultAsync();
+            user.ProductOpinion.Add(productOpinion);
+            _dbContext.Update(user);
+            await _dbContext.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
+
 
         // GET: ProductOpinion/Edit/5
         public ActionResult Edit(int id)
