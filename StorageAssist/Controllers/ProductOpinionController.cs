@@ -93,7 +93,6 @@ namespace StorageAssist.Controllers
         {
             try
             {
-                //var user = await _dbContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(User)).FirstOrDefaultAsync();
                 _dbContext.ProductOpinion.Update(productOpinion);
                 await _dbContext.SaveChangesAsync();
 
@@ -103,32 +102,41 @@ namespace StorageAssist.Controllers
             {
                 var error = new ErrorViewModel()
                 {
-                    ErrorMessage = "Deleting product opinion failed"
+                    ErrorMessage = "Editing product opinion failed"
                 };
                 return RedirectToAction("Index", "Error", error);
             }
         }
 
         // GET: ProductOpinion/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(string id)
         {
-            return View();
+            var user = await _dbContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(User))
+                .Include(p => p.ProductOpinion)
+                .FirstOrDefaultAsync();
+            var productOpinion = user.ProductOpinion.FirstOrDefault(po => po.ProductOpinionId == id);
+            return View(productOpinion);
         }
 
         // POST: ProductOpinion/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete([Bind("ProductName, Price, PriceOpinion, Quality, Value, Description, ProductOpinionId")] ProductOpinion productOpinion)
         {
             try
             {
-                // TODO: Add delete logic here
+                _dbContext.ProductOpinion.Remove(productOpinion);
+                await _dbContext.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                var error = new ErrorViewModel()
+                {
+                    ErrorMessage = "Deleting product failed."
+                };
+                return RedirectToAction("Index", "Error", error);
             }
         }
     }
