@@ -24,6 +24,7 @@ namespace StorageAssist.Controllers
         }
 
         // GET: ProductOpinion
+        [Authorize]
         public async Task<ActionResult> Index()
         {
             var user = await _dbContext.ApplicationUser
@@ -33,17 +34,19 @@ namespace StorageAssist.Controllers
             return View(user.ProductOpinion);
         }
 
-        public async Task<ActionResult> Details(string productId)
+        [Authorize]
+        public async Task<ActionResult> Details(string id)
         {
             var user = await _dbContext.ApplicationUser
                 .Where(u => u.Id == _user.GetUserId(HttpContext.User))
                 .Include(u => u.ProductOpinion)
                 .FirstOrDefaultAsync();
-            var product = user.ProductOpinion.FirstOrDefault(p => p.ProductOpinionId == productId);
+            var product = user.ProductOpinion.FirstOrDefault(p => p.ProductOpinionId == id);
             return View(product);
         }
 
         [Authorize]
+        [HttpGet]
         public ActionResult AddProductOpinion()
         {
             return View();
@@ -73,25 +76,36 @@ namespace StorageAssist.Controllers
 
 
         // GET: ProductOpinion/Edit/5
-        public ActionResult Edit(int id)
+        [HttpGet]
+        public async Task<ActionResult> Edit(string id)
         {
-            return View();
+            var user = await _dbContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(User))
+                .Include(p=>p.ProductOpinion)
+                .FirstOrDefaultAsync();
+            var productOpinion = user.ProductOpinion.FirstOrDefault(po => po.ProductOpinionId == id);
+            return View(productOpinion);
         }
 
         // POST: ProductOpinion/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit([Bind("ProductName, Price, PriceOpinion, Quality, Value, Description, ProductOpinionId")] ProductOpinion productOpinion)
         {
             try
             {
-                // TODO: Add update logic here
+                //var user = await _dbContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(User)).FirstOrDefaultAsync();
+                _dbContext.ProductOpinion.Update(productOpinion);
+                await _dbContext.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                var error = new ErrorViewModel()
+                {
+                    ErrorMessage = "Deleting product opinion failed"
+                };
+                return RedirectToAction("Index", "Error", error);
             }
         }
 
