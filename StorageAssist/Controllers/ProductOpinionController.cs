@@ -56,14 +56,17 @@ namespace StorageAssist.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AddProductOpinionDb(
-            [Bind("ProductName, PriceOpinion, Quality, Value, Description")]
-            ProductOpinion productOpinion, string price)
+        public async Task<ActionResult> AddProductOpinionDb([Bind("ProductName, Description")]
+                                                              ProductOpinion productOpinion, string price, string priceOpinion, string value, string quality)
         {
             productOpinion.Price = double.Parse(price, System.Globalization.CultureInfo.InvariantCulture);
+            productOpinion.Price = double.Parse(price, System.Globalization.CultureInfo.InvariantCulture);
+            productOpinion.PriceOpinion = double.Parse(priceOpinion, System.Globalization.CultureInfo.InvariantCulture);
+            productOpinion.Value = double.Parse(value, System.Globalization.CultureInfo.InvariantCulture);
+            productOpinion.Quality = double.Parse(quality, System.Globalization.CultureInfo.InvariantCulture);
             if (!ModelState.IsValid)
             {
-                ErrorViewModel error = new ErrorViewModel()
+                var error = new ErrorViewModel()
                 {
                     ErrorMessage = "Invalid data"
                 };
