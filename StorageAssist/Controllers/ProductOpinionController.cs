@@ -17,6 +17,7 @@ namespace StorageAssist.Controllers
     {
         private readonly AppUserContext _dbContext;
         private readonly UserManager<ApplicationUser> _user;
+
         public ProductOpinionController(AppUserContext appUserContext, UserManager<ApplicationUser> user)
         {
             _dbContext = appUserContext;
@@ -29,7 +30,7 @@ namespace StorageAssist.Controllers
         {
             var user = await _dbContext.ApplicationUser
                 .Where(u => u.Id == _user.GetUserId(HttpContext.User))
-                    .Include(u => u.ProductOpinion)
+                .Include(u => u.ProductOpinion)
                 .FirstOrDefaultAsync();
             return View(user.ProductOpinion);
         }
@@ -55,8 +56,11 @@ namespace StorageAssist.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AddProductOpinionDb([Bind("ProductName, Price, PriceOpinion, Quality, Value, Description")] ProductOpinion productOpinion)
+        public async Task<ActionResult> AddProductOpinionDb(
+            [Bind("ProductName, PriceOpinion, Quality, Value, Description")]
+            ProductOpinion productOpinion, string price)
         {
+            productOpinion.Price = double.Parse(price, System.Globalization.CultureInfo.InvariantCulture);
             if (!ModelState.IsValid)
             {
                 ErrorViewModel error = new ErrorViewModel()
@@ -65,8 +69,8 @@ namespace StorageAssist.Controllers
                 };
                 return RedirectToAction("Index", "Error");
             }
-            double priceQualityRatio = productOpinion.Quality / productOpinion.Price;
-            productOpinion.PriceQualityRatio = priceQualityRatio;
+
+            productOpinion.PriceQualityRatio = productOpinion.Quality / productOpinion.Price;
             var user = await _dbContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(User)).FirstOrDefaultAsync();
             user.ProductOpinion.Add(productOpinion);
             _dbContext.Update(user);
@@ -80,7 +84,7 @@ namespace StorageAssist.Controllers
         public async Task<ActionResult> Edit(string id)
         {
             var user = await _dbContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(User))
-                .Include(p=>p.ProductOpinion)
+                .Include(p => p.ProductOpinion)
                 .FirstOrDefaultAsync();
             var productOpinion = user.ProductOpinion.FirstOrDefault(po => po.ProductOpinionId == id);
             return View(productOpinion);
@@ -89,8 +93,21 @@ namespace StorageAssist.Controllers
         // POST: ProductOpinion/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind("ProductName, Price, PriceOpinion, Quality, Value, Description, ProductOpinionId")] ProductOpinion productOpinion)
+        public async Task<ActionResult> Edit(
+            [Bind("ProductName, PriceOpinion, Quality, Value, Description, ProductOpinionId")]
+            ProductOpinion productOpinion, string price)
         {
+            productOpinion.Price = double.Parse(price, System.Globalization.CultureInfo.InvariantCulture);
+            if (!ModelState.IsValid)
+            {
+                var error = new ErrorViewModel()
+                {
+                    ErrorMessage = "Invalid number"
+                };
+                return RedirectToAction("Index", "Error", error);
+            }
+
+            productOpinion.PriceQualityRatio = productOpinion.Quality / productOpinion.Price;
             try
             {
                 _dbContext.ProductOpinion.Update(productOpinion);
@@ -103,38 +120,6 @@ namespace StorageAssist.Controllers
                 var error = new ErrorViewModel()
                 {
                     ErrorMessage = "Editing product opinion failed"
-                };
-                return RedirectToAction("Index", "Error", error);
-            }
-        }
-
-        // GET: ProductOpinion/Delete/5
-        public async Task<ActionResult> Delete(string id)
-        {
-            var user = await _dbContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(User))
-                .Include(p => p.ProductOpinion)
-                .FirstOrDefaultAsync();
-            var productOpinion = user.ProductOpinion.FirstOrDefault(po => po.ProductOpinionId == id);
-            return View(productOpinion);
-        }
-
-        // POST: ProductOpinion/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete([Bind("ProductName, Price, PriceOpinion, Quality, Value, Description, ProductOpinionId")] ProductOpinion productOpinion)
-        {
-            try
-            {
-                _dbContext.ProductOpinion.Remove(productOpinion);
-                await _dbContext.SaveChangesAsync();
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                var error = new ErrorViewModel()
-                {
-                    ErrorMessage = "Deleting product failed."
                 };
                 return RedirectToAction("Index", "Error", error);
             }

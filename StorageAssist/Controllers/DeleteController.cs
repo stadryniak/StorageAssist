@@ -72,6 +72,11 @@ namespace StorageAssist.Controllers
                         .FirstOrDefaultAsync();
                     await Delete(toDelete);
                     return RedirectToAction("Index", "Notes");
+                case ProductOpinion _:
+                    toDelete = await _appUserContext.ProductOpinion.FirstOrDefaultAsync(po =>
+                        po.ProductOpinionId == id);
+                    await Delete(toDelete);
+                    return RedirectToAction("Index", "ProductOpinion");
                 default:
                     var error = new ErrorViewModel()
                     {
@@ -127,6 +132,9 @@ namespace StorageAssist.Controllers
                     break;
                 case Note note:
                     _appUserContext.Notes.Remove(note);
+                    break;
+                case ProductOpinion productOpinion:
+                    _appUserContext.ProductOpinion.Remove(productOpinion);
                     break;
             }
             await _appUserContext.SaveChangesAsync();

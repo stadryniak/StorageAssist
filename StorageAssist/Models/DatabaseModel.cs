@@ -117,7 +117,7 @@ namespace StorageAssist.Models
         [Range(0, 10, ErrorMessage = "Value must be in 0 - 10 range")]
         public double Value { get; set; } 
 
-        [DisplayName("Quality/Price ratio")]
+        [DisplayName("Quality/Price")]
         [Range(0, double.MaxValue, ErrorMessage = "Price cannot be negative (or enormously big)")]
         public double PriceQualityRatio { get; set; } // computed by controller
 
