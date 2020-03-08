@@ -67,10 +67,10 @@ namespace StorageAssist.Controllers
                 {
                     ErrorMessage = "Invalid data"
                 };
-                return RedirectToAction("Index", "Error");
+                return RedirectToAction("Index", "Error", error);
             }
 
-            productOpinion.PriceQualityRatio = productOpinion.Quality / productOpinion.Price;
+            productOpinion.PriceQualityRatio = productOpinion.PriceOpinion * productOpinion.Quality;
             var user = await _dbContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(User)).FirstOrDefaultAsync();
             user.ProductOpinion.Add(productOpinion);
             _dbContext.Update(user);
@@ -81,6 +81,7 @@ namespace StorageAssist.Controllers
 
         // GET: ProductOpinion/Edit/5
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult> Edit(string id)
         {
             var user = await _dbContext.ApplicationUser.Where(u => u.Id == _user.GetUserId(User))
@@ -93,11 +94,14 @@ namespace StorageAssist.Controllers
         // POST: ProductOpinion/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(
-            [Bind("ProductName, PriceOpinion, Quality, Value, Description, ProductOpinionId")]
-            ProductOpinion productOpinion, string price)
+        [Authorize]
+        public async Task<ActionResult> Edit([Bind("ProductName, Description, ProductOpinionId")]
+                                             ProductOpinion productOpinion, string price, string priceOpinion, string value, string quality)
         {
             productOpinion.Price = double.Parse(price, System.Globalization.CultureInfo.InvariantCulture);
+            productOpinion.PriceOpinion = double.Parse(priceOpinion, System.Globalization.CultureInfo.InvariantCulture);
+            productOpinion.Value = double.Parse(value, System.Globalization.CultureInfo.InvariantCulture);
+            productOpinion.Quality = double.Parse(quality, System.Globalization.CultureInfo.InvariantCulture);
             if (!ModelState.IsValid)
             {
                 var error = new ErrorViewModel()
@@ -107,7 +111,7 @@ namespace StorageAssist.Controllers
                 return RedirectToAction("Index", "Error", error);
             }
 
-            productOpinion.PriceQualityRatio = productOpinion.Quality / productOpinion.Price;
+            productOpinion.PriceQualityRatio = productOpinion.PriceOpinion * productOpinion.Quality;
             try
             {
                 _dbContext.ProductOpinion.Update(productOpinion);

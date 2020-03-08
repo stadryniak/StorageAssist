@@ -1,4 +1,5 @@
-﻿@model IEnumerable<StorageAssist.Models.ProductOpinion>
+﻿@using System.Globalization
+@model IEnumerable<StorageAssist.Models.ProductOpinion>
 
 @{
     ViewData["Title"] = "Products' Opinions";
@@ -48,19 +49,34 @@
                         @Html.DisplayFor(modelItem => item.ProductName)
                     </th>
                     <td class="col-1 align-middle">
-                        @Html.DisplayFor(modelItem => item.Price)
+                        @{
+                            var price = item.Price.ToString(CultureInfo.InvariantCulture);
+                        }
+                        @Html.DisplayFor(modelItem => price)
                     </td>
                     <td class="col-1 align-middle">
-                        @Html.DisplayFor(modelItem => item.PriceOpinion)
+                        @{
+                            var priceOpinion = item.PriceOpinion.ToString(CultureInfo.InvariantCulture);
+                        }
+                        @Html.DisplayFor(modelItem => priceOpinion)
                     </td>
                     <td class="col-1 align-middle">
-                        @Html.DisplayFor(modelItem => item.Quality)
+                        @{
+                            var quality = item.Quality.ToString(CultureInfo.InvariantCulture);
+                        }
+                        @Html.DisplayFor(modelItem => quality)
                     </td>
                     <td class="col-1 align-middle">
-                        @Html.DisplayFor(modelItem => item.Value)
+                        @{
+                            var value = item.Value.ToString(CultureInfo.InvariantCulture);
+                        }
+                        @Html.DisplayFor(modelItem => value)
                     </td>
                     <td class="col-2 align-middle">
-                        @Html.DisplayFor(modelItem => item.PriceQualityRatio)
+                        @{
+                            var priceQualityRatio = item.PriceQualityRatio.ToString(CultureInfo.InvariantCulture);
+                        }
+                        @Html.DisplayFor(modelItem => priceQualityRatio)
                     </td>
                     <td class="col-2 align-middle">
                         @Html.DisplayFor(modelItem => item.Description)

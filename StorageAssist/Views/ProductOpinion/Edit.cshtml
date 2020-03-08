@@ -1,4 +1,5 @@
-﻿@model StorageAssist.Models.ProductOpinion
+﻿@using System.Globalization
+@model StorageAssist.Models.ProductOpinion
 
 @{
     ViewData["Title"] = "Edit";
@@ -20,34 +21,37 @@
                 <span asp-validation-for="ProductName" class="text-danger"></span>
             </div>
             <div class="form-group">
+                @{
+                    var price = Model.Price.ToString(CultureInfo.InvariantCulture);
+                }
                 <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
+                <input asp-for="Price" class="form-control" value="@price" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PriceOpinion" class="control-label"></label>
-                <input asp-for="PriceOpinion" class="form-control" />
+                <input asp-for="PriceOpinion" class="form-control" type="number" value="@Model.PriceOpinion.ToString(System.Globalization.CultureInfo.InvariantCulture)" step="0.1" />
                 <span asp-validation-for="PriceOpinion" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Quality" class="control-label"></label>
-                <input asp-for="Quality" class="form-control" />
+                <input asp-for="Quality" class="form-control" type="number" value="@Model.Quality.ToString(System.Globalization.CultureInfo.InvariantCulture)" step="0.1" />
                 <span asp-validation-for="Quality" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Value" class="control-label"></label>
-                <input asp-for="Value" class="form-control" />
+                <input asp-for="Value" class="form-control" type="number" value="@Model.Value.ToString(System.Globalization.CultureInfo.InvariantCulture)" step="0.1" />
                 <span asp-validation-for="Value" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <input asp-for="Description" class="form-control"  />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
-            <input type="hidden" value="@Model.ProductOpinionId"/>
+            <input type="hidden" value="@Model.ProductOpinionId" />
         </form>
     </div>
 </div>
